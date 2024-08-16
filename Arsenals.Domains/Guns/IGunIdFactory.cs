@@ -5,5 +5,5 @@ namespace Arsenals.Domains.Guns;
 /// </summary>
 public interface IGunIdFactory
 {
-    Task<GunId> Build();
+    Task<GunId> BuildAsync();
 }

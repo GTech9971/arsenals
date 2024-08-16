@@ -1,3 +1,6 @@
+using System.Collections.Immutable;
+using Arsenals.Domains.Bullets;
+
 namespace Arsenals.Domains.Guns;
 
 /// <summary>
@@ -11,7 +14,8 @@ public class Gun : IEquatable<Gun>
     private GunCategory _category;
 
     //以下任意項目
-    private readonly Uri? _imageUri;
+    private Uri? _imageUri;
+    private IEnumerable<Bullet> _useableBullets;
 
     public Gun(GunId id,
                 GunName name,
@@ -27,6 +31,17 @@ public class Gun : IEquatable<Gun>
         _name = name;
         _capacity = capacity;
         _category = category;
+        _useableBullets = Enumerable.Empty<Bullet>();
+    }
+
+    public Gun(GunId id,
+            GunName name,
+            GunCategory category,
+            Capacity capacity,
+            IEnumerable<Bullet> useableBullets) : this(id, name, category, capacity)
+    {
+        ArgumentNullException.ThrowIfNull(useableBullets, nameof(useableBullets));
+        _useableBullets = useableBullets.Distinct();
     }
 
     public GunId Id => _id;
@@ -34,7 +49,7 @@ public class Gun : IEquatable<Gun>
     public GunCategory Category => _category;
     public Capacity Capacity => _capacity;
     public Uri? ImageUrl => _imageUri;
-    //TODO 弾丸
+    public ImmutableArray<Bullet> UseableBullets => _useableBullets.ToImmutableArray();
 
 
     /// <summary>
@@ -56,4 +71,36 @@ public class Gun : IEquatable<Gun>
 
     public override bool Equals(object? obj) { return Equals(obj as Gun); }
     public override int GetHashCode() { return _id.GetHashCode(); }
+
+    /// <summary>
+    /// 銃ビルダー
+    /// </summary>
+    public class Builder
+    {
+        private Gun? _target;
+
+        public Builder(GunId id,
+                GunName name,
+                GunCategory category,
+                Capacity capacity)
+        {
+            _target = new Gun(id, name, category, capacity);
+        }
+
+        public Builder WithImageUrl(Uri? imageUrl)
+        {
+            ArgumentNullException.ThrowIfNull(_target, nameof(_target));
+            _target._imageUri = imageUrl;
+            return this;
+        }
+
+        public Gun Build()
+        {
+            ArgumentNullException.ThrowIfNull(_target, nameof(_target));
+
+            Gun result = _target;
+            _target = null;
+            return result;
+        }
+    }
 }

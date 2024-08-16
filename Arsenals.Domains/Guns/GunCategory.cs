@@ -6,16 +6,29 @@ namespace Arsenals.Domains.Guns;
 public class GunCategory : IEquatable<GunCategory>
 {
     private readonly GunCategoryId _id;
+    private GunCategoryName _name;
 
-    //TODO 名前
-
-    public GunCategory(GunCategoryId id)
+    public GunCategory(GunCategoryId id,
+                        GunCategoryName name)
     {
         ArgumentNullException.ThrowIfNull(id, nameof(id));
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
         _id = id;
+        _name = name;
     }
 
     public GunCategoryId Id => _id;
+    public GunCategoryName Name => _name;
+
+    /// <summary>
+    /// カテゴリー名を変更する
+    /// </summary>
+    /// <param name="name"></param>
+    public void ChangeName(GunCategoryName name)
+    {
+        ArgumentNullException.ThrowIfNull(name, nameof(name));
+        _name = name;
+    }
 
     public bool Equals(GunCategory? other)
     {
