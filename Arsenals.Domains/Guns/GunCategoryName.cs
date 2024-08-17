@@ -12,7 +12,7 @@ public class GunCategoryName : IEquatable<GunCategoryName>
     public GunCategoryName(string value)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(value, nameof(value));
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(MAX, value.Length, nameof(value));
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(value.Length, MAX, nameof(value));
 
         _value = value;
     }

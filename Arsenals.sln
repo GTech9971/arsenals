@@ -5,6 +5,10 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arsenals.Domains", "Arsenals.Domains\Arsenals.Domains.csproj", "{DD7D1F48-2214-4168-9E96-595AC9298A00}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.ApplicationServices", "Arsenals.ApplicationServices\Arsenals.ApplicationServices.csproj", "{7045581C-A6AA-4EA9-BB7D-A315054B0EC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.ApplicationServices.Tests", "Arsenals.ApplicationServices.Tests\Arsenals.ApplicationServices.Tests.csproj", "{7C5C0DA4-2939-4C9C-9748-4B41097CCD3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{DD7D1F48-2214-4168-9E96-595AC9298A00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD7D1F48-2214-4168-9E96-595AC9298A00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD7D1F48-2214-4168-9E96-595AC9298A00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7045581C-A6AA-4EA9-BB7D-A315054B0EC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7045581C-A6AA-4EA9-BB7D-A315054B0EC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7045581C-A6AA-4EA9-BB7D-A315054B0EC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7045581C-A6AA-4EA9-BB7D-A315054B0EC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C5C0DA4-2939-4C9C-9748-4B41097CCD3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C5C0DA4-2939-4C9C-9748-4B41097CCD3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C5C0DA4-2939-4C9C-9748-4B41097CCD3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C5C0DA4-2939-4C9C-9748-4B41097CCD3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
