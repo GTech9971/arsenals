@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.ApplicationService
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.Infrastructure.FileStorage", "Arsenals.Infrastructure.FileStorage\Arsenals.Infrastructure.FileStorage.csproj", "{19DC4259-8237-463E-BE6A-BCE46DCAC414}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.WebApi", "Arsenals.WebApi\Arsenals.WebApi.csproj", "{66972A16-9AEB-4064-BF94-B0CF4B77285B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{19DC4259-8237-463E-BE6A-BCE46DCAC414}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19DC4259-8237-463E-BE6A-BCE46DCAC414}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19DC4259-8237-463E-BE6A-BCE46DCAC414}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66972A16-9AEB-4064-BF94-B0CF4B77285B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66972A16-9AEB-4064-BF94-B0CF4B77285B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66972A16-9AEB-4064-BF94-B0CF4B77285B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66972A16-9AEB-4064-BF94-B0CF4B77285B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

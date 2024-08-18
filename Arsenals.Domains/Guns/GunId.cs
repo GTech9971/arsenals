@@ -48,7 +48,7 @@ public class GunId : IEquatable<GunId>
 
     public bool Equals(GunId? other)
     {
-        if (other == null) { return false; }
+        if (object.ReferenceEquals(null, other)) { return false; }
         if (object.ReferenceEquals(this, other)) { return true; }
         return _value == other.Value;
     }
