@@ -49,17 +49,49 @@ public class Gun : IEquatable<Gun>
     public GunCategory Category => _category;
     public Capacity Capacity => _capacity;
     public Uri? ImageUrl => _imageUri;
-    public ImmutableArray<Bullet> UseableBullets => _useableBullets.ToImmutableArray();
+    public ImmutableList<Bullet> UseableBullets => _useableBullets.ToImmutableList();
 
 
     /// <summary>
-    /// 銃の内容を更新する
+    /// 銃の名称を更新する
     /// </summary>
-    /// <param name="updateCommand"></param>
-    public void Update(GunUpdateCommand updateCommand)
+    /// <param name="gunName"></param>
+    public void ChangeName(GunName gunName)
     {
-        ArgumentNullException.ThrowIfNull(updateCommand, nameof(updateCommand));
-        //TODO
+        ArgumentNullException.ThrowIfNull(gunName, nameof(gunName));
+        _name = gunName;
+    }
+
+    /// <summary>
+    /// 銃のカテゴリーを変更する
+    /// </summary>
+    /// <param name="gunCategory"></param>
+    public void ChangeCategory(GunCategory gunCategory)
+    {
+        ArgumentNullException.ThrowIfNull(gunCategory, nameof(gunCategory));
+        _category = gunCategory;
+    }
+
+    /// <summary>
+    /// 装弾数を変更する
+    /// </summary>
+    /// <param name="capacity"></param>
+    public void ChangeCapacity(Capacity capacity)
+    {
+        ArgumentNullException.ThrowIfNull(capacity, nameof(capacity));
+        _capacity = capacity;
+    }
+
+    /// <summary>
+    /// 使用する弾丸を変更する
+    /// </summary>
+    /// <param name="bullets"></param>
+    public void ChangeUseBullets(IEnumerable<Bullet> bullets)
+    {
+        ArgumentNullException.ThrowIfNull(bullets, nameof(bullets));
+        _useableBullets = bullets
+                            .Distinct()
+                            .ToList();
     }
 
     public bool Equals(Gun? other)

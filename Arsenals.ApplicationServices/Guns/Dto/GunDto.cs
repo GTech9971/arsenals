@@ -20,5 +20,5 @@ public class GunDto
     public string? ImageUrl { get; set; }
 
     [JsonPropertyName("bullets")]
-    public IEnumerable<BulletDto> Bullets { get; set; } = Enumerable.Empty<BulletDto>();
+    public IEnumerable<BulletDto> Bullets { get; set; } = [];
 }

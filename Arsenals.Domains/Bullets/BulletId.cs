@@ -11,7 +11,7 @@ public class BulletId : IEquatable<BulletId>
 
     public BulletId(int value)
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(MIN, value, nameof(value));
+        ArgumentOutOfRangeException.ThrowIfLessThan(value, MIN, nameof(value));
         _value = value;
     }
     /// <summary>

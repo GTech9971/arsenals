@@ -13,8 +13,8 @@ public class BulletName : IEquatable<BulletName>
     public BulletName(string value)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(value, nameof(value));
-        ArgumentOutOfRangeException.ThrowIfLessThan(MIN, value.Length, nameof(value));
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(MAX, value.Length, nameof(value));
+        ArgumentOutOfRangeException.ThrowIfLessThan(value.Length, MIN, nameof(value));
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(value.Length, MAX, nameof(value));
         _value = value;
     }
 

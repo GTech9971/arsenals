@@ -12,8 +12,8 @@ public class Damage : IEquatable<Damage>
 
     public Damage(int value)
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(MIN, value, nameof(value));
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(MAX, value, nameof(value));
+        ArgumentOutOfRangeException.ThrowIfLessThan(value, MIN, nameof(value));
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(value, MAX, nameof(value));
         _value = value;
     }
 

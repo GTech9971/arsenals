@@ -47,7 +47,7 @@ public class BulletService
         //削除対象の弾丸のみ紐づいている場合、削除不可
         return await guns
                         .Where(x => x.UseableBullets.Any(b => b.Id.Equals(bulletId)))
-                        .Where(x => x.UseableBullets.Length == 1)
+                        .Where(x => x.UseableBullets.Count == 1)
                         .AnyAsync() == false;
 
     }
