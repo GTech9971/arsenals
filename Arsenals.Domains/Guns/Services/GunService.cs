@@ -18,7 +18,7 @@ public class GunService
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public async Task<bool> Exists(GunName name)
+    public async Task<bool> ExistsAsync(GunName name)
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 

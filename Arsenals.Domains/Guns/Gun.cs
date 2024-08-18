@@ -94,6 +94,16 @@ public class Gun : IEquatable<Gun>
             return this;
         }
 
+        public Builder WithBullets(IEnumerable<Bullet>? bullets)
+        {
+            ArgumentNullException.ThrowIfNull(_target, nameof(_target));
+
+            _target._useableBullets = bullets == null
+                                        ? Enumerable.Empty<Bullet>()
+                                        : bullets.Distinct();
+            return this;
+        }
+
         public Gun Build()
         {
             ArgumentNullException.ThrowIfNull(_target, nameof(_target));

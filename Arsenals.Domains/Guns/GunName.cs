@@ -11,10 +11,8 @@ public class GunName : IEquatable<GunName>
     public GunName(string value)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(value, nameof(value));
-        if (value.Length < MIN_LEN)
-        {
-            throw new ArgumentException($"銃名称の長さが{MIN_LEN}桁以外です");
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(value.Length, MIN_LEN, nameof(value));
+
         _value = value;
     }
 
