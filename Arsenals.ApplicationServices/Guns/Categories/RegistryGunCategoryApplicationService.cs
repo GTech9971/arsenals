@@ -15,22 +15,22 @@ public class RegistryGunCategoryApplicationService
     private readonly IGunCategoryRepository _repository;
     private readonly IGunCategoryIdFactory _gunCategoryIdFactory;
     private readonly IMapper _mapper;
-    private readonly GunCategoryNameService _gunCategoryNameService;
+    private readonly GunCategoryService _gunCategoryService;
 
     public RegistryGunCategoryApplicationService(IGunCategoryRepository repository,
                                                 IGunCategoryIdFactory gunCategoryIdFactory,
                                                 IMapper mapper,
-                                                GunCategoryNameService gunCategoryNameService)
+                                                GunCategoryService gunCategoryService)
     {
         ArgumentNullException.ThrowIfNull(repository, nameof(repository));
         ArgumentNullException.ThrowIfNull(gunCategoryIdFactory, nameof(gunCategoryIdFactory));
         ArgumentNullException.ThrowIfNull(mapper, nameof(mapper));
-        ArgumentNullException.ThrowIfNull(gunCategoryNameService, nameof(gunCategoryNameService));
+        ArgumentNullException.ThrowIfNull(gunCategoryService, nameof(gunCategoryService));
 
         _repository = repository;
         _gunCategoryIdFactory = gunCategoryIdFactory;
         _mapper = mapper;
-        _gunCategoryNameService = gunCategoryNameService;
+        _gunCategoryService = gunCategoryService;
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public class RegistryGunCategoryApplicationService
 
         using (TransactionScope transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
-            bool exists = await _gunCategoryNameService.ExistsAsync(gunCategoryName);
+            bool exists = await _gunCategoryService.ExistsAsync(gunCategoryName);
             if (exists) { throw new DuplicateGunCategoryNameException(gunCategoryName); }
 
             GunCategoryId gunCategoryId = await _gunCategoryIdFactory.BuildAsync();

@@ -24,6 +24,28 @@ public class GunId : IEquatable<GunId>
     /// </summary>
     public int Value => _value;
 
+    /// <summary>
+    /// 銃の画像のURLを取得する
+    /// </summary>
+    /// <param name="root"></param>
+    /// <returns></returns>
+    public Uri ImageUrl(string root)
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(root, nameof(root));
+        return new Uri(Path.Combine(root, _value.ToString()));
+    }
+
+    /// <summary>
+    /// 銃の画像の保存先を取得する
+    /// </summary>
+    /// <param name="root"></param>
+    /// <returns></returns>
+    public string ImagePath(string root)
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(root, nameof(root));
+        return Path.Combine(root, _value.ToString());
+    }
+
     public bool Equals(GunId? other)
     {
         if (other == null) { return false; }

@@ -3,11 +3,11 @@ namespace Arsenals.Domains.Guns.Services;
 /// <summary>
 /// 銃名称のドメインサービス
 /// </summary>
-public class GunNameService
+public class GunService
 {
     private readonly IGunRepository _repository;
 
-    public GunNameService(IGunRepository repository)
+    public GunService(IGunRepository repository)
     {
         ArgumentNullException.ThrowIfNull(repository, nameof(repository));
         _repository = repository;
