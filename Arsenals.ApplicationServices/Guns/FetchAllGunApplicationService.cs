@@ -1,5 +1,4 @@
-using System.Text.Json.Serialization;
-using Arsenals.Domains.Bullets;
+using Arsenals.ApplicationServices.Guns.Dto;
 using Arsenals.Domains.Guns;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
@@ -39,7 +38,7 @@ public class FetchAllGunApplicationService
     /// </summary>
     /// <param name="gunCategoryIdVal"></param>
     /// <returns></returns>
-    public async Task<List<FetchAllGunResponseDto>> ExecuteAsync(int? gunCategoryIdVal)
+    public async Task<List<GunDto>> ExecuteAsync(int? gunCategoryIdVal)
     {
         IAsyncEnumerable<Gun> guns = _repository.FetchAll();
 
@@ -51,68 +50,7 @@ public class FetchAllGunApplicationService
         }
 
         return await guns
-                        .Select(x => _mapper.Map<Gun, FetchAllGunResponseDto>(x))
+                        .Select(x => _mapper.Map<Gun, GunDto>(x))
                         .ToListAsync();
-    }
-}
-
-public class FetchAllGunResponseDto
-{
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = null!;
-
-    [JsonPropertyName("category")]
-    public GunCategoryDto Category { get; set; } = null!;
-
-    [JsonPropertyName("capacity")]
-    public int Capacity { get; set; }
-
-    [JsonPropertyName("imageUrl")]
-    public string? ImageUrl { get; set; }
-
-    [JsonPropertyName("bullets")]
-    public IEnumerable<BulletDto> Bullets { get; set; } = Enumerable.Empty<BulletDto>();
-}
-
-public class GunCategoryDto
-{
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = null!;
-}
-
-public class BulletDto
-{
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = null!;
-    [JsonPropertyName("damage")]
-    public int Damage { get; set; }
-}
-
-public class FetchAllGunResponseDtoMappingProfile : Profile
-{
-    public FetchAllGunResponseDtoMappingProfile()
-    {
-        CreateMap<Bullet, BulletDto>()
-        .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id.Value))
-        .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name.Value))
-        .ForMember(dst => dst.Damage, opt => opt.MapFrom(src => src.Damage.Value));
-
-        CreateMap<GunCategory, GunCategoryDto>()
-        .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id.Value))
-        .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name.Value));
-
-        CreateMap<Gun, FetchAllGunResponseDto>()
-        .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id.Value))
-        .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name.Value))
-        .ForMember(dst => dst.Capacity, opt => opt.MapFrom(src => src.Capacity.Value))
-        .ForMember(dst => dst.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl));
     }
 }

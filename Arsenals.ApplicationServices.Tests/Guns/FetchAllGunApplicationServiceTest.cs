@@ -1,4 +1,5 @@
 using Arsenals.ApplicationServices.Guns;
+using Arsenals.ApplicationServices.Guns.Dto;
 using Arsenals.Domains.Guns;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +21,7 @@ public class FetchAllGunApplicationServiceTest
 
         var config = new MapperConfiguration(c =>
         {
-            c.AddMaps(typeof(FetchAllGunResponseDto).Assembly);
+            c.AddMaps(typeof(GunDto).Assembly);
         });
         _mapper = config.CreateMapper();
     }
@@ -38,7 +39,7 @@ public class FetchAllGunApplicationServiceTest
                                                                                 configurationMock.Object,
                                                                                 _mapper);
 
-        List<FetchAllGunResponseDto> empty = await sut.ExecuteAsync(null);
+        List<GunDto> empty = await sut.ExecuteAsync(null);
 
         Assert.False(empty.Any());
     }
@@ -56,7 +57,7 @@ public class FetchAllGunApplicationServiceTest
                                                                                 configurationMock.Object,
                                                                                 _mapper);
 
-        List<FetchAllGunResponseDto> actual = await sut.ExecuteAsync(null);
+        List<GunDto> actual = await sut.ExecuteAsync(null);
 
         Assert.True(actual.Any());
         Assert.Equal(2, actual.Count);
@@ -77,7 +78,7 @@ public class FetchAllGunApplicationServiceTest
                                                                                 configurationMock.Object,
                                                                                 _mapper);
 
-        List<FetchAllGunResponseDto> actual = await sut.ExecuteAsync(gunCategoryIdVal);
+        List<GunDto> actual = await sut.ExecuteAsync(gunCategoryIdVal);
 
         Assert.Equal(expected, actual.Count);
     }

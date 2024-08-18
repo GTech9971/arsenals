@@ -59,7 +59,7 @@ public class GunId : IEquatable<GunId>
     public static bool operator ==(GunId left, GunId right)
     {
         if (object.ReferenceEquals(left, right)) { return true; }
-        return left.Value == right.Value;
+        return left.Equals(right);
     }
 
     public static bool operator !=(GunId left, GunId right) => !(left == right);
