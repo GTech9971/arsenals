@@ -1,3 +1,4 @@
+using Arsenals.ApplicationServices.Guns;
 using Arsenals.Domains.Bullets;
 using Arsenals.Domains.Bullets.Exceptions;
 using Arsenals.Domains.Guns;

@@ -6,7 +6,7 @@ using Arsenals.Domains.Guns;
 using Arsenals.Domains.Guns.Exceptions;
 using Arsenals.Domains.Guns.Services;
 
-namespace Arsenals.ApplicationServices;
+namespace Arsenals.ApplicationServices.Guns;
 
 /// <summary>
 /// 銃登録アプリケーションサービス
