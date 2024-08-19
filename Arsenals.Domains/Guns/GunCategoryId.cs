@@ -6,6 +6,15 @@ namespace Arsenals.Domains.Guns;
 public class GunCategoryId : IEquatable<GunCategoryId>
 {
 
+    /// <summary>
+    /// 最初のIDを生成する
+    /// </summary>
+    /// <returns></returns>
+    public static GunCategoryId FirstId()
+    {
+        return new GunCategoryId(MIN);
+    }
+
     public static readonly int MIN = 100;
 
     private readonly int _value;
@@ -21,6 +30,15 @@ public class GunCategoryId : IEquatable<GunCategoryId>
     /// </summary>
     public int Value => _value;
 
+
+    /// <summary>
+    /// 次のIDを生成する
+    /// </summary>
+    /// <returns></returns>
+    public GunCategoryId Next()
+    {
+        return new GunCategoryId(_value + MIN);
+    }
 
     public bool Equals(GunCategoryId? other)
     {

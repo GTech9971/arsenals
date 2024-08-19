@@ -5,6 +5,15 @@ namespace Arsenals.Domains.Bullets;
 /// </summary>
 public class BulletId : IEquatable<BulletId>
 {
+    /// <summary>
+    /// 最初のIDを生成する
+    /// </summary>
+    /// <returns></returns>
+    public static BulletId FirstId()
+    {
+        return new BulletId(MIN);
+    }
+
     private static readonly int MIN = 100;
 
     private readonly int _value;
@@ -19,6 +28,14 @@ public class BulletId : IEquatable<BulletId>
     /// </summary>
     public int Value => _value;
 
+    /// <summary>
+    /// 次のIDを生成する
+    /// </summary>
+    /// <returns></returns>
+    public BulletId Next()
+    {
+        return new BulletId(_value + MIN);
+    }
 
     public bool Equals(BulletId? other)
     {

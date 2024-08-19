@@ -5,6 +5,16 @@ namespace Arsenals.Domains.Guns;
 /// </summary>
 public class GunId : IEquatable<GunId>
 {
+
+    /// <summary>
+    /// 最初のIDを生成する
+    /// </summary>
+    /// <returns></returns>
+    public static GunId FirstId()
+    {
+        return new GunId(MIN);
+    }
+
     private static readonly int MIN = 100;
 
     private readonly int _value;
@@ -44,6 +54,15 @@ public class GunId : IEquatable<GunId>
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(root, nameof(root));
         return Path.Combine(root, _value.ToString());
+    }
+
+    /// <summary>
+    /// 次のIDを生成する
+    /// </summary>
+    /// <returns></returns>
+    public GunId Next()
+    {
+        return new GunId(_value + MIN);
     }
 
     public bool Equals(GunId? other)
