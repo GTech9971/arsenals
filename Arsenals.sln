@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.Infrastructure.Fil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.WebApi", "Arsenals.WebApi\Arsenals.WebApi.csproj", "{66972A16-9AEB-4064-BF94-B0CF4B77285B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.Infrastructure.Ef", "Arsenals.Infrastructure.Ef\Arsenals.Infrastructure.Ef.csproj", "{4981972A-03AF-458E-9BD6-03C31B829FA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{66972A16-9AEB-4064-BF94-B0CF4B77285B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66972A16-9AEB-4064-BF94-B0CF4B77285B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66972A16-9AEB-4064-BF94-B0CF4B77285B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4981972A-03AF-458E-9BD6-03C31B829FA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4981972A-03AF-458E-9BD6-03C31B829FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4981972A-03AF-458E-9BD6-03C31B829FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4981972A-03AF-458E-9BD6-03C31B829FA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
