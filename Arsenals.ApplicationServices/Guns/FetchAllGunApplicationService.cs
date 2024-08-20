@@ -38,7 +38,7 @@ public class FetchAllGunApplicationService
     /// </summary>
     /// <param name="gunCategoryIdVal"></param>
     /// <returns></returns>
-    public async Task<List<GunDto>> ExecuteAsync(int? gunCategoryIdVal)
+    public IAsyncEnumerable<GunDto> Execute(int? gunCategoryIdVal)
     {
         IAsyncEnumerable<Gun> guns = _repository.FetchAll();
 
@@ -49,8 +49,7 @@ public class FetchAllGunApplicationService
                     .Where(x => x.Category.Id.Equals(gunCategoryId));
         }
 
-        return await guns
-                        .Select(x => _mapper.Map<Gun, GunDto>(x))
-                        .ToListAsync();
+        return guns
+                .Select(x => _mapper.Map<Gun, GunDto>(x));
     }
 }

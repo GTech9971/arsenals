@@ -1,6 +1,5 @@
 using Arsenals.Domains.Guns;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Arsenals.Infrastructure.Ef.Guns;
@@ -35,7 +34,7 @@ public class EfGunRepository : IGunRepository
                         .Include(x => x.GunCategoryData)
                         .Include(x => x.BulletDataList)
                         .AsSplitQuery()
-                        .ProjectTo<Gun>(_mapper.ConfigurationProvider)
+                        .Select(x => _mapper.Map<Gun>(x))
                         .AsAsyncEnumerable();
     }
 
@@ -47,7 +46,7 @@ public class EfGunRepository : IGunRepository
                                 .Include(x => x.GunCategoryData)
                                 .Include(x => x.BulletDataList)
                                 .AsSplitQuery()
-                                .ProjectTo<Gun>(_mapper.ConfigurationProvider)
+                                .Select(x => _mapper.Map<Gun>(x))
                                 .SingleOrDefaultAsync();
     }
 

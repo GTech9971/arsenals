@@ -12,6 +12,7 @@ using Arsenals.Infrastructure.Ef.Bullets;
 using Arsenals.Infrastructure.Ef.Guns;
 using Arsenals.Infrastructure.FileStorage;
 using Arsenals.Infrastructure.FileStorage.Guns;
+using Arsenals.WebApi.Filters;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +64,7 @@ builder.Services.AddScoped<GunImageUploadApplicationService>();
 builder.Services.AddControllers(options =>
 {
     //フィルター
+    options.Filters.Add(new ExceptionFilter());
 }).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.WriteIndented = true;

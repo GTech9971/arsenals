@@ -1,6 +1,5 @@
 using Arsenals.Domains.Bullets;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Arsenals.Infrastructure.Ef.Bullets;
@@ -33,7 +32,7 @@ public class EfBulletRepository : IBulletRepository
     {
         return _context.Bullets
                         .AsNoTracking()
-                        .ProjectTo<Bullet>(_mapper.ConfigurationProvider)
+                        .Select(x => _mapper.Map<Bullet>(x))
                         .AsAsyncEnumerable();
     }
 
@@ -42,7 +41,7 @@ public class EfBulletRepository : IBulletRepository
         return await _context.Bullets
                                 .AsNoTracking()
                                 .Where(x => x.Id == id.Value)
-                                .ProjectTo<Bullet>(_mapper.ConfigurationProvider)
+                                .Select(x => _mapper.Map<Bullet>(x))
                                 .SingleOrDefaultAsync();
     }
 

@@ -18,17 +18,16 @@ public class GunController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<GunDto>>> FetchAllAsync([FromQuery] int? category)
+    public async Task<ActionResult<BaseResponse<IEnumerable<GunDto>>>> FetchAllAsync([FromQuery] int? category)
     {
-        List<GunDto> results = await _fetchAllGunApplicationService.ExecuteAsync(category);
+        IAsyncEnumerable<GunDto> results = _fetchAllGunApplicationService.Execute(category);
 
-        if (results.Any() == false)
+        if (await results.AnyAsync() == false)
         {
-            //TODO レスポンス
             return NoContent();
         }
 
-        return Ok(results);
+        return Ok(new BaseResponse<IEnumerable<GunDto>>(await results.ToListAsync()));
     }
 }
 
