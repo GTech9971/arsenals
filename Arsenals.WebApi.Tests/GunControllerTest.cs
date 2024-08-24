@@ -59,6 +59,29 @@ public class GunControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
         Assert.Equal(200, baseResponse.Data.Id);
     }
 
+    [Theory]
+    [InlineData(100, HttpStatusCode.OK)]
+    [InlineData(999, HttpStatusCode.NotFound)]
+    public async void fetch_gun(int gunId, HttpStatusCode expectedStatusCode)
+    {
+        using HttpResponseMessage response = await _client.GetAsync($"/api/guns/{gunId}");
+        BaseResponse<GunDto>? baseResponse = await response.Content.ReadFromJsonAsync<BaseResponse<GunDto>>();
+
+        Assert.Equal(expectedStatusCode, response.StatusCode);
+        Assert.NotNull(baseResponse);
+
+        if (expectedStatusCode == HttpStatusCode.OK)
+        {
+            Assert.NotNull(baseResponse.Data);
+            Assert.True(baseResponse.Success);
+        }
+        else
+        {
+            Assert.False(baseResponse.Success);
+            Assert.NotNull(baseResponse.Message);
+        }
+    }
+
     [Fact]
     public async void delete_gun()
     {
