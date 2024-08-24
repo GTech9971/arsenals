@@ -39,7 +39,7 @@ public class FetchAllGunApplicationServiceTest
                                                                                 configurationMock.Object,
                                                                                 _mapper);
 
-        List<GunDto> empty = await sut.ExecuteAsync(null);
+        List<GunDto> empty = await sut.Execute(null).ToListAsync();
 
         Assert.False(empty.Any());
     }
@@ -57,7 +57,7 @@ public class FetchAllGunApplicationServiceTest
                                                                                 configurationMock.Object,
                                                                                 _mapper);
 
-        List<GunDto> actual = await sut.ExecuteAsync(null);
+        List<GunDto> actual = await sut.Execute(null).ToListAsync();
 
         Assert.True(actual.Any());
         Assert.Equal(2, actual.Count);
@@ -78,7 +78,7 @@ public class FetchAllGunApplicationServiceTest
                                                                                 configurationMock.Object,
                                                                                 _mapper);
 
-        List<GunDto> actual = await sut.ExecuteAsync(gunCategoryIdVal);
+        List<GunDto> actual = await sut.Execute(gunCategoryIdVal).ToListAsync();
 
         Assert.Equal(expected, actual.Count);
     }

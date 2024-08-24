@@ -1,4 +1,6 @@
 using Arsenals.Infrastructure.Ef;
+using Arsenals.Infrastructure.Ef.Bullets;
+using Arsenals.Infrastructure.Ef.Guns;
 using Microsoft.EntityFrameworkCore;
 using Testcontainers.PostgreSql;
 
@@ -41,5 +43,11 @@ public class PostgreSqlTest : IAsyncLifetime
     public async Task InitializeAsync()
     {
         await _context.Database.MigrateAsync();
+
+        //テストデータ作成
+        await _context.GunCategories.AddAsync(new GunCategoryData() { Id = 100, Name = "ハンドガン" });
+        await _context.Guns.AddAsync(new GunData() { Id = 100, Name = "M1911A1", Capacity = 6, GunCategoryDataId = 100 });
+        await _context.Bullets.AddAsync(new BulletData() { Id = 100, Name = "45ACP", Damage = 12 });
+        _context.SaveChanges();
     }
 }

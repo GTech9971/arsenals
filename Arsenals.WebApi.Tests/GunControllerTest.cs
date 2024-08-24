@@ -1,6 +1,9 @@
 using System;
 using System.Net;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using Arsenals.ApplicationServices.Guns;
 using Arsenals.ApplicationServices.Guns.Dto;
 using Microsoft.AspNetCore.Mvc.Testing;
 
@@ -32,9 +35,36 @@ public class GunControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
     public async void fetch_guns_empty()
     {
         using HttpResponseMessage response = await _client.GetAsync("/api/guns");
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+    }
 
-        //var jsonResponse = await response.Content.ReadFromJsonAsync<BaseResponse<IEnumerable<GunDto>>>();
+    [Fact]
+    public async void registry_gun()
+    {
+        RegistryGunRequestDto requestDto = new RegistryGunRequestDto()
+        {
+            Name = "Glock22",
+            CategoryId = 100,
+            Capacity = 17,
+            UseBullets = [100]
+        };
+
+        using HttpResponseMessage response = await _client.PostAsJsonAsync<RegistryGunRequestDto>("/api/guns", requestDto);
+
+        BaseResponse<RegistryGunResponseDto>? baseResponse = await response.Content.ReadFromJsonAsync<BaseResponse<RegistryGunResponseDto>>();
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        Assert.NotNull(baseResponse);
+        Assert.NotNull(baseResponse.Data);
+        Assert.Equal(200, baseResponse.Data.Id);
+    }
+
+    [Fact]
+    public async void delete_gun()
+    {
+        using HttpResponseMessage response = await _client.DeleteAsync("/api/guns/100");
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
+
 }

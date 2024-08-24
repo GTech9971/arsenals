@@ -21,11 +21,7 @@ public class GunId : IEquatable<GunId>
 
     public GunId(int value)
     {
-        if (value < MIN)
-        {
-            throw new ArgumentException($"銃IDの値が最小値{MIN}より小さいです");
-        }
-
+        ArgumentOutOfRangeException.ThrowIfLessThan(value, MIN, nameof(value));
         _value = value;
     }
 

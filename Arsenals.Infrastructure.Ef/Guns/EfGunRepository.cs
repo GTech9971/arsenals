@@ -62,6 +62,18 @@ public class EfGunRepository : IGunRepository
         if (found == null)
         {
             GunData gunData = _mapper.Map<Gun, GunData>(gun);
+            //Mapperでmapするとインスタンスを新規作成してしまうため、新しいデータとして認識されてしまう
+            //既存データからのリレーションと認識させるため、以下の代入を行う
+            if (gun.UseableBullets.Any())
+            {
+                IEnumerable<int> gunIdList = gun.UseableBullets
+                                                    .Select(x => x.Id.Value);
+
+                //再割り当てをさせないためにAsNoTrackingを記載してはいけない
+                gunData.BulletDataList = await _context.Bullets
+                                                            .Where(x => gunIdList.Contains(x.Id))
+                                                            .ToListAsync();
+            }
             await _context.Guns.AddAsync(gunData);
         }
         else
@@ -69,5 +81,7 @@ public class EfGunRepository : IGunRepository
             _mapper.Map(gun, found);
             _context.Guns.Update(found);
         }
+
+        await _context.SaveChangesAsync();
     }
 }

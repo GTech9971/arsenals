@@ -8,7 +8,7 @@ namespace Arsenals.Infrastructure.Ef.Bullets;
 
 [Table("bullets")]
 [DisplayName("弾丸")]
-[Index(nameof(Name))]
+[Index(nameof(Name), IsUnique = true)]
 public class BulletData
 {
     [Key]
@@ -30,10 +30,6 @@ public class BulletData
     [DisplayName("ダメージ")]
     public int Damage { get; set; }
 
-    [ForeignKey(nameof(GunData))]
-    [Column("gun_id")]
-    [DisplayName("銃の外部キー")]
-    public int GunDataId { get; set; }
 
-    public GunData? GunData { get; set; }
+    public ICollection<GunData>? GunDataList { get; set; }
 }

@@ -48,9 +48,9 @@ public class RegistryGunApplicationServiceTest
             Capacity = 6
         };
 
-        int newId = await sut.ExecuteAsync(request);
+        RegistryGunResponseDto newId = await sut.ExecuteAsync(request);
 
-        Assert.Equal(200, newId);
+        Assert.Equal(200, newId.Id);
     }
 
     [Fact]

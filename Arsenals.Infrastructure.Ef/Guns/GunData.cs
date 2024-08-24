@@ -8,7 +8,7 @@ namespace Arsenals.Infrastructure.Ef.Guns;
 
 [Table("guns")]
 [DisplayName("銃")]
-[Index(nameof(Name))]
+[Index(nameof(Name), IsUnique = true)]
 public class GunData
 {
     [Key]

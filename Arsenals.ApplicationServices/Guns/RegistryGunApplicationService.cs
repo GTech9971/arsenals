@@ -46,7 +46,7 @@ public class RegistryGunApplicationService
     /// <exception cref="DuplicateGunNameException"></exception>
     /// <exception cref="GunCategoryNotFoundException"></exception>
     /// <exception cref="BulletNotFoundException"></exception>
-    public async Task<int> ExecuteAsync(RegistryGunRequestDto request)
+    public async Task<RegistryGunResponseDto> ExecuteAsync(RegistryGunRequestDto request)
     {
         ArgumentNullException.ThrowIfNull(request, nameof(request));
 
@@ -99,7 +99,7 @@ public class RegistryGunApplicationService
             await _repository.SaveAsync(gun);
             transaction.Complete();
 
-            return gunId.Value;
+            return new RegistryGunResponseDto(gunId.Value);
         }
     }
 }
@@ -120,4 +120,18 @@ public class RegistryGunRequestDto
 
     [JsonPropertyName("useBullets")]
     public IEnumerable<int> UseBullets { get; set; } = Enumerable.Empty<int>();
+}
+
+public class RegistryGunResponseDto
+{
+
+    public RegistryGunResponseDto() { }
+
+    public RegistryGunResponseDto(int id)
+    {
+        Id = id;
+    }
+
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
 }

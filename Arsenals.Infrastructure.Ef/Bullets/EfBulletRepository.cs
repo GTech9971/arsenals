@@ -26,6 +26,8 @@ public class EfBulletRepository : IBulletRepository
                                     .SingleAsync();
 
         _context.Bullets.Remove(bulletData);
+
+        await _context.SaveChangesAsync();
     }
 
     public IAsyncEnumerable<Bullet> FetchAll()
@@ -60,5 +62,7 @@ public class EfBulletRepository : IBulletRepository
             _mapper.Map(bullet, found);
             _context.Bullets.Update(found);
         }
+
+        await _context.SaveChangesAsync();
     }
 }

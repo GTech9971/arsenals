@@ -12,9 +12,7 @@ public class ExceptionFilter : IExceptionFilter
     {
         Exception exception = context.Exception;
 
-        BaseResponse<object?> response = new BaseResponse<object?>(null);
-        response.Success = false;
-        response.Message = exception.Message;
+        BaseResponse<object?> response = BaseResponse<object?>.CreateError(exception);
 
 
         string contentJson = JsonSerializer.Serialize(response);

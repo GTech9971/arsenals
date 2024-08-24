@@ -61,5 +61,7 @@ public class EfGunCategoryRepository : IGunCategoryRepository
             _mapper.Map<GunCategoryData, GunCategory>(found);
             _context.GunCategories.Update(found);
         }
+
+        await _context.SaveChangesAsync();
     }
 }

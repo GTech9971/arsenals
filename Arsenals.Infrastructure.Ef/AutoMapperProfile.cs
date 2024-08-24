@@ -11,18 +11,33 @@ public class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         CreateMap<GunCategoryData, GunCategory>()
-        .ForMember(dst => dst.Id, opt => opt.MapFrom(src => new GunCategoryId(src.Id)))
-        .ForMember(dst => dst.Name, opt => opt.MapFrom(src => new GunCategoryName(src.Name)));
+        .ConstructUsing(src => new GunCategory(new GunCategoryId(src.Id), new GunCategoryName(src.Name)))
+        .ReverseMap()
+        .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id.Value))
+        .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name.Value));
 
         CreateMap<BulletData, Bullet>()
-        .ForMember(dst => dst.Id, opt => opt.MapFrom(src => new BulletId(src.Id)))
-        .ForMember(dst => dst.Name, opt => opt.MapFrom(src => new BulletName(src.Name)))
-        .ForMember(dst => dst.Damage, opt => opt.MapFrom(src => new Damage(src.Damage)));
+        .ConstructUsing(src => new Bullet(new BulletId(src.Id), new BulletName(src.Name), new Damage(src.Damage)))
+        .ReverseMap()
+        .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id.Value))
+        .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name.Value))
+        .ForMember(dst => dst.Damage, opt => opt.MapFrom(src => src.Damage.Value));
 
         CreateMap<GunData, Gun>()
-        .ForMember(dst => dst.Id, opt => opt.MapFrom(src => new GunId(src.Id)))
-        .ForMember(dst => dst.Name, opt => opt.MapFrom(src => new GunName(src.Name)))
-        .ForMember(dst => dst.Capacity, opt => opt.MapFrom(src => new Capacity(src.Capacity)))
-        .ForMember(dst => dst.UseableBullets, opt => opt.MapFrom(src => src.BulletDataList));
+        .ConstructUsing(src => new Gun(new GunId(src.Id),
+                                         new GunName(src.Name),
+                                         new GunCategory(new GunCategoryId(src.GunCategoryDataId),
+                                                         new GunCategoryName(src.GunCategoryData.Name)),
+                                         new Capacity(src.Capacity),
+                                         src.BulletDataList == null
+                                            ? Enumerable.Empty<Bullet>()
+                                            : src.BulletDataList.Select(x => new Bullet(new BulletId(x.Id), new BulletName(x.Name), new Damage(x.Damage)))))
+        .ReverseMap()
+        .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id.Value))
+        .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name.Value))
+        .ForMember(dst => dst.Capacity, opt => opt.MapFrom(src => src.Capacity.Value))
+        .ForMember(dst => dst.BulletDataList, opt => opt.Ignore()) //マッピングしてしまうとインスタンスが新規作成されるためEFCoreで新規データ登録とみなされる
+        .ForMember(dst => dst.GunCategoryDataId, opt => opt.MapFrom(src => src.Category.Id.Value))
+        .ForMember(dst => dst.GunCategoryData, opt => opt.Ignore()); //マッピングしてしまうとインスタンスが新規作成されるためEFCoreで新規データ登録とみなされる
     }
 }
