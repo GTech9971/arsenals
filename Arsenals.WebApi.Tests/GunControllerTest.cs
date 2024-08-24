@@ -5,30 +5,25 @@ using System.Text;
 using System.Text.Json;
 using Arsenals.ApplicationServices.Guns;
 using Arsenals.ApplicationServices.Guns.Dto;
-using Microsoft.AspNetCore.Mvc.Testing;
+using Arsenals.Infrastructure.Ef.Bullets;
+using Arsenals.Infrastructure.Ef.Guns;
+using Microsoft.EntityFrameworkCore;
 
 namespace Arsenals.WebApi.Tests;
 
 [Collection("TestContainer Collection")]
-public class GunControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
+public class GunControllerTest : BaseControllerTest
 {
+    public GunControllerTest(PostgreSqlTest fixture) : base(fixture) { }
 
-    private readonly WebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
 
-    public GunControllerTest(PostgreSqlTest fixture)
+    private async Task CreateInitDataAsync()
     {
-        var options = new WebApplicationFactoryClientOptions()
-        {
-            AllowAutoRedirect = true
-        };
-        _factory = new CustomWebApplicationFactory(fixture);
-        _client = _factory.CreateClient(options);
-    }
-
-    public void Dispose()
-    {
-        _factory.Dispose();
+        //テストデータ作成
+        await _context.GunCategories.AddAsync(new GunCategoryData() { Id = 100, Name = "ハンドガン" });
+        await _context.Guns.AddAsync(new GunData() { Id = 100, Name = "M1911A1", Capacity = 6, GunCategoryDataId = 100 });
+        await _context.Bullets.AddAsync(new BulletData() { Id = 100, Name = "45ACP", Damage = 12 });
+        _context.SaveChanges();
     }
 
     [Fact]
@@ -41,6 +36,8 @@ public class GunControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
     [Fact]
     public async void registry_gun()
     {
+        await CreateInitDataAsync();
+
         RegistryGunRequestDto requestDto = new RegistryGunRequestDto()
         {
             Name = "Glock22",
@@ -64,6 +61,8 @@ public class GunControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
     [InlineData(999, HttpStatusCode.NotFound)]
     public async void fetch_gun(int gunId, HttpStatusCode expectedStatusCode)
     {
+        await CreateInitDataAsync();
+
         using HttpResponseMessage response = await _client.GetAsync($"/api/guns/{gunId}");
         BaseResponse<GunDto>? baseResponse = await response.Content.ReadFromJsonAsync<BaseResponse<GunDto>>();
 
@@ -85,9 +84,44 @@ public class GunControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
     [Fact]
     public async void delete_gun()
     {
+        await CreateInitDataAsync();
+
         using HttpResponseMessage response = await _client.DeleteAsync("/api/guns/100");
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+    }
+
+    [Fact]
+    public async void update_gun()
+    {
+        await CreateInitDataAsync();
+        await _context.GunCategories.AddAsync(new GunCategoryData() { Id = 200, Name = "ライフル" });
+        await _context.Bullets.AddAsync(new BulletData() { Id = 200, Name = "9mm", Damage = 9 });
+        await _context.SaveChangesAsync();
+
+        UpdateGunRequestDto request = new UpdateGunRequestDto()
+        {
+            Name = "Glock19",
+            Category = 200,
+            Capacity = 9,
+            Bullets = [200]
+        };
+        IEnumerable<string> filedList = ["name", "category", "capacity", "bullets"];
+        string fieldMask = string.Join("&", filedList.Select(x => $"fieldMask={x}"));
+        using HttpResponseMessage response = await _client.PatchAsJsonAsync($"/api/guns/100?{fieldMask}", request);
+
+        BaseResponse<GunDto?>? baseResponse = await response.Content.ReadFromJsonAsync<BaseResponse<GunDto?>>();
+
+        Assert.NotNull(baseResponse);
+        Assert.NotNull(baseResponse.Data);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var data = baseResponse.Data;
+
+        Assert.Equal(request.Name, data.Name);
+        Assert.Equal(request.Category, data.Category.Id);
+        Assert.Equal(request.Capacity, data.Capacity);
+        Assert.Equal(request.Bullets.First(), data.Bullets.First().Id);
     }
 
 }

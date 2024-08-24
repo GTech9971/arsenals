@@ -22,6 +22,15 @@ public class BaseResponse<T>
         };
     }
 
+    public static BaseResponse<T?> CreateError(string message)
+    {
+        return new BaseResponse<T?>()
+        {
+            Message = message,
+            Success = false
+        };
+    }
+
 
     public BaseResponse(T? data)
     {

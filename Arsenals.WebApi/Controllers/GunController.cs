@@ -1,5 +1,6 @@
 using Arsenals.ApplicationServices.Guns;
 using Arsenals.ApplicationServices.Guns.Dto;
+using Arsenals.Domains.Exceptions;
 using Arsenals.Domains.Guns.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,21 +14,25 @@ public class GunController : ControllerBase
     private readonly RegistryGunApplicationService _registryGunApplicationService;
     private readonly FetchGunApplicationService _fetchGunApplicationService;
     private readonly DeleteGunApplicationService _deleteGunApplicationService;
+    private readonly UpdateGunApplicationService _updateGunApplicationService;
 
     public GunController(FetchAllGunApplicationService fetchAllGunApplicationService,
                             RegistryGunApplicationService registryGunApplicationService,
                             FetchGunApplicationService fetchGunApplicationService,
-                            DeleteGunApplicationService deleteGunApplicationService)
+                            DeleteGunApplicationService deleteGunApplicationService,
+                            UpdateGunApplicationService updateGunApplicationService)
     {
         ArgumentNullException.ThrowIfNull(fetchAllGunApplicationService, nameof(fetchAllGunApplicationService));
         ArgumentNullException.ThrowIfNull(registryGunApplicationService, nameof(registryGunApplicationService));
         ArgumentNullException.ThrowIfNull(fetchGunApplicationService, nameof(fetchGunApplicationService));
         ArgumentNullException.ThrowIfNull(deleteGunApplicationService, nameof(deleteGunApplicationService));
+        ArgumentNullException.ThrowIfNull(updateGunApplicationService, nameof(updateGunApplicationService));
 
         _fetchAllGunApplicationService = fetchAllGunApplicationService;
         _registryGunApplicationService = registryGunApplicationService;
         _fetchGunApplicationService = fetchGunApplicationService;
         _deleteGunApplicationService = deleteGunApplicationService;
+        _updateGunApplicationService = updateGunApplicationService;
     }
 
     /// <summary>
@@ -106,6 +111,35 @@ public class GunController : ControllerBase
             return BadRequest(BaseResponse<object?>.CreateError(ex));
         }
         catch (GunNotFoundException ex)
+        {
+            return NotFound(BaseResponse<object?>.CreateError(ex));
+        }
+    }
+
+    /// <summary>
+    /// 銃の更新
+    /// </summary>
+    /// <param name="gunId"></param>
+    /// <param name="fieldMask"></param>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    [HttpPatch("{gunId}")]
+    public async Task<ActionResult<BaseResponse<GunDto>>> UpdateAsync(int gunId, [FromQuery] IEnumerable<string> fieldMask, [FromBody] UpdateGunRequestDto request)
+    {
+        try
+        {
+            GunDto data = await _updateGunApplicationService.ExecuteAsync(gunId, fieldMask, request);
+            return Ok(BaseResponse<GunDto>.CreateSuccess(data));
+        }
+        catch (ArgumentException ex) when (ex is ArgumentNullException || ex is ArgumentOutOfRangeException)
+        {
+            return BadRequest(BaseResponse<object?>.CreateError(ex));
+        }
+        catch (DuplicateException ex)
+        {
+            return BadRequest(BaseResponse<object?>.CreateError(ex));
+        }
+        catch (NotFoundException ex)
         {
             return NotFound(BaseResponse<object?>.CreateError(ex));
         }
