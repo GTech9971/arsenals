@@ -124,4 +124,27 @@ public class GunControllerTest : BaseControllerTest
         Assert.Equal(request.Bullets.First(), data.Bullets.First().Id);
     }
 
+    [Fact]
+    public async void upload_gun_image()
+    {
+        await CreateInitDataAsync();
+
+        string path = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Icon-assult.png");
+        using MultipartFormDataContent content = new MultipartFormDataContent();
+        using ByteArrayContent fileContent = new ByteArrayContent(await File.ReadAllBytesAsync(path));
+        fileContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
+        {
+            Name = "data",
+            FileName = "icon.png"
+        };
+        content.Add(fileContent);
+
+        using HttpResponseMessage response = await _client.PostAsync("/api/guns/100/images", content);
+        BaseResponse<string>? baseResponse = await response.Content.ReadFromJsonAsync<BaseResponse<string>>();
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        Assert.NotNull(baseResponse);
+        Assert.NotNull(baseResponse.Data);
+    }
+
 }

@@ -15,24 +15,28 @@ public class GunController : ControllerBase
     private readonly FetchGunApplicationService _fetchGunApplicationService;
     private readonly DeleteGunApplicationService _deleteGunApplicationService;
     private readonly UpdateGunApplicationService _updateGunApplicationService;
+    private readonly GunImageUploadApplicationService _gunImageUploadApplicationService;
 
     public GunController(FetchAllGunApplicationService fetchAllGunApplicationService,
                             RegistryGunApplicationService registryGunApplicationService,
                             FetchGunApplicationService fetchGunApplicationService,
                             DeleteGunApplicationService deleteGunApplicationService,
-                            UpdateGunApplicationService updateGunApplicationService)
+                            UpdateGunApplicationService updateGunApplicationService,
+                            GunImageUploadApplicationService gunImageUploadApplicationService)
     {
         ArgumentNullException.ThrowIfNull(fetchAllGunApplicationService, nameof(fetchAllGunApplicationService));
         ArgumentNullException.ThrowIfNull(registryGunApplicationService, nameof(registryGunApplicationService));
         ArgumentNullException.ThrowIfNull(fetchGunApplicationService, nameof(fetchGunApplicationService));
         ArgumentNullException.ThrowIfNull(deleteGunApplicationService, nameof(deleteGunApplicationService));
         ArgumentNullException.ThrowIfNull(updateGunApplicationService, nameof(updateGunApplicationService));
+        ArgumentNullException.ThrowIfNull(gunImageUploadApplicationService, nameof(gunImageUploadApplicationService));
 
         _fetchAllGunApplicationService = fetchAllGunApplicationService;
         _registryGunApplicationService = registryGunApplicationService;
         _fetchGunApplicationService = fetchGunApplicationService;
         _deleteGunApplicationService = deleteGunApplicationService;
         _updateGunApplicationService = updateGunApplicationService;
+        _gunImageUploadApplicationService = gunImageUploadApplicationService;
     }
 
     /// <summary>
@@ -136,6 +140,39 @@ public class GunController : ControllerBase
             return BadRequest(BaseResponse<object?>.CreateError(ex));
         }
         catch (DuplicateException ex)
+        {
+            return BadRequest(BaseResponse<object?>.CreateError(ex));
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(BaseResponse<object?>.CreateError(ex));
+        }
+    }
+
+    /// <summary>
+    /// 銃の画像アップロード
+    /// </summary>
+    /// <param name="gunId"></param>
+    /// <param name="file"></param>
+    /// <returns></returns>
+    [HttpPost("{gunId}/images")]
+    public async Task<ActionResult<BaseResponse<string>>> UploadGunImageAsync([FromRoute] int gunId, [FromForm] IFormFile data)
+    {
+        if (data == null || data.Length == 0)
+        {
+            return BadRequest(BaseResponse<object?>.CreateError("画像ファイルは必須です"));
+        }
+
+        try
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                await data.CopyToAsync(memoryStream);
+                Uri uri = await _gunImageUploadApplicationService.ExecuteAsync(gunId, memoryStream);
+                return this.Created(BaseResponse<string>.CreateSuccess(uri.ToString()));
+            }
+        }
+        catch (ArgumentException ex) when (ex is ArgumentNullException || ex is ArgumentOutOfRangeException)
         {
             return BadRequest(BaseResponse<object?>.CreateError(ex));
         }
