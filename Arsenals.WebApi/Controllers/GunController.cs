@@ -17,12 +17,15 @@ public class GunController : ControllerBase
     private readonly UpdateGunApplicationService _updateGunApplicationService;
     private readonly GunImageUploadApplicationService _gunImageUploadApplicationService;
 
+    private readonly ILogger<GunController> _logger;
+
     public GunController(FetchAllGunApplicationService fetchAllGunApplicationService,
                             RegistryGunApplicationService registryGunApplicationService,
                             FetchGunApplicationService fetchGunApplicationService,
                             DeleteGunApplicationService deleteGunApplicationService,
                             UpdateGunApplicationService updateGunApplicationService,
-                            GunImageUploadApplicationService gunImageUploadApplicationService)
+                            GunImageUploadApplicationService gunImageUploadApplicationService,
+                            ILogger<GunController> logger)
     {
         ArgumentNullException.ThrowIfNull(fetchAllGunApplicationService, nameof(fetchAllGunApplicationService));
         ArgumentNullException.ThrowIfNull(registryGunApplicationService, nameof(registryGunApplicationService));
@@ -30,6 +33,7 @@ public class GunController : ControllerBase
         ArgumentNullException.ThrowIfNull(deleteGunApplicationService, nameof(deleteGunApplicationService));
         ArgumentNullException.ThrowIfNull(updateGunApplicationService, nameof(updateGunApplicationService));
         ArgumentNullException.ThrowIfNull(gunImageUploadApplicationService, nameof(gunImageUploadApplicationService));
+        ArgumentNullException.ThrowIfNull(logger, nameof(logger));
 
         _fetchAllGunApplicationService = fetchAllGunApplicationService;
         _registryGunApplicationService = registryGunApplicationService;
@@ -37,6 +41,7 @@ public class GunController : ControllerBase
         _deleteGunApplicationService = deleteGunApplicationService;
         _updateGunApplicationService = updateGunApplicationService;
         _gunImageUploadApplicationService = gunImageUploadApplicationService;
+        _logger = logger;
     }
 
     /// <summary>

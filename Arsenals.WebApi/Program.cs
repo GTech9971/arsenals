@@ -17,12 +17,23 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Log
+builder.Logging.AddLog4Net();
+
 //DB
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// ロガーファクトリの設定
+var loggerFactory = LoggerFactory.Create(loggingBuilder =>
+{
+    loggingBuilder.AddLog4Net();
+});
 
 builder.Services.AddDbContext<ArsenalDbContext>((_, options) =>
 {
     options.UseNpgsql(connectionString, x => x.MigrationsAssembly(typeof(Program).Assembly.FullName));
+    options.UseLoggerFactory(loggerFactory); // ここでカスタムロガーファクトリを使用
+    options.EnableSensitiveDataLogging(); // 重要: SQL の詳細を含めるためのオプション
 });
 
 //AutoMapper
@@ -60,11 +71,15 @@ builder.Services.AddScoped<UpdateGunApplicationService>();
 
 builder.Services.AddScoped<GunImageUploadApplicationService>();
 
+//Filter
+builder.Services.AddScoped<ExceptionFilter>();
+builder.Services.AddScoped<LoggingFilter>();
+
 //Json
 builder.Services.AddControllers(options =>
 {
-    //フィルター
-    options.Filters.Add(new ExceptionFilter());
+    options.Filters.Add<ExceptionFilter>();
+    options.Filters.Add<LoggingFilter>();
 }).AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.WriteIndented = true;
