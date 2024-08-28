@@ -2,6 +2,7 @@ using Arsenals.ApplicationServices.Guns.Dto;
 using Arsenals.Domains.Guns;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Arsenals.ApplicationServices.Guns;
 
@@ -17,17 +18,22 @@ public class FetchAllGunApplicationService
     private readonly IGunRepository _repository;
     private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
+    private readonly ILogger<FetchAllGunApplicationService> _logger;
 
     public FetchAllGunApplicationService(IGunRepository repository,
                                             IConfiguration configuration,
-                                            IMapper mapper)
+                                            IMapper mapper,
+                                            ILogger<FetchAllGunApplicationService> logger)
     {
         ArgumentNullException.ThrowIfNull(repository, nameof(repository));
         ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
         ArgumentNullException.ThrowIfNull(mapper, nameof(mapper));
+        ArgumentNullException.ThrowIfNull(logger, nameof(logger));
+
         _repository = repository;
         _configuration = configuration;
         _mapper = mapper;
+        _logger = logger;
 
         _root = _configuration[KEY]!;
         ArgumentNullException.ThrowIfNullOrWhiteSpace(_root, nameof(_root));
@@ -40,6 +46,9 @@ public class FetchAllGunApplicationService
     /// <returns></returns>
     public IAsyncEnumerable<GunDto> Execute(int? gunCategoryIdVal)
     {
+        _logger.LogInformation($"Execute(gunCategoryIdVal = {gunCategoryIdVal}) - Start");
+        //_logger.LogMethodStart(() => { };
+
         IAsyncEnumerable<Gun> guns = _repository.FetchAll();
 
         if (gunCategoryIdVal != null)
@@ -48,6 +57,8 @@ public class FetchAllGunApplicationService
             guns = guns
                     .Where(x => x.Category.Id.Equals(gunCategoryId));
         }
+
+        _logger.LogInformation($"Execute(gunCategoryIdVal = {gunCategoryIdVal}) - End");
 
         return guns
                 .Select(x => _mapper.Map<Gun, GunDto>(x));

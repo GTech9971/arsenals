@@ -3,6 +3,7 @@ using Arsenals.ApplicationServices.Guns.Dto;
 using Arsenals.Domains.Guns;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace Arsenals.ApplicationServices.Tests.Guns;
@@ -13,6 +14,7 @@ public class FetchAllGunApplicationServiceTest
     private readonly DummyGunCategoryBuilder _dummyGunCategoryBuilder;
     private readonly DummyGunBuilder _dummyGunBuilder;
     private readonly IMapper _mapper;
+    private readonly ILogger<FetchAllGunApplicationService> _logger;
 
     public FetchAllGunApplicationServiceTest()
     {
@@ -24,6 +26,7 @@ public class FetchAllGunApplicationServiceTest
             c.AddMaps(typeof(GunDto).Assembly);
         });
         _mapper = config.CreateMapper();
+        _logger = new Mock<ILogger<FetchAllGunApplicationService>>().Object;
     }
 
     [Fact]
@@ -37,7 +40,8 @@ public class FetchAllGunApplicationServiceTest
 
         FetchAllGunApplicationService sut = new FetchAllGunApplicationService(gunRepositoryMock.Object,
                                                                                 configurationMock.Object,
-                                                                                _mapper);
+                                                                                _mapper,
+                                                                                _logger);
 
         List<GunDto> empty = await sut.Execute(null).ToListAsync();
 
@@ -55,7 +59,8 @@ public class FetchAllGunApplicationServiceTest
 
         FetchAllGunApplicationService sut = new FetchAllGunApplicationService(gunRepositoryMock.Object,
                                                                                 configurationMock.Object,
-                                                                                _mapper);
+                                                                                _mapper,
+                                                                                _logger);
 
         List<GunDto> actual = await sut.Execute(null).ToListAsync();
 
@@ -76,7 +81,8 @@ public class FetchAllGunApplicationServiceTest
 
         FetchAllGunApplicationService sut = new FetchAllGunApplicationService(gunRepositoryMock.Object,
                                                                                 configurationMock.Object,
-                                                                                _mapper);
+                                                                                _mapper,
+                                                                                _logger);
 
         List<GunDto> actual = await sut.Execute(gunCategoryIdVal).ToListAsync();
 
