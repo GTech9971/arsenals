@@ -1,19 +1,25 @@
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Arsenals.ApplicationServices.Guns;
 using Arsenals.ApplicationServices.Guns.Dto;
+using Arsenals.ApplicationServices.Users;
 using Arsenals.Domains;
 using Arsenals.Domains.Bullets;
 using Arsenals.Domains.Bullets.Services;
 using Arsenals.Domains.Guns;
 using Arsenals.Domains.Guns.Services;
+using Arsenals.Domains.Users;
 using Arsenals.Infrastructure.Ef;
 using Arsenals.Infrastructure.Ef.Bullets;
 using Arsenals.Infrastructure.Ef.Guns;
 using Arsenals.Infrastructure.FileStorage;
 using Arsenals.Infrastructure.FileStorage.Guns;
+using Arsenals.WebApi;
 using Arsenals.WebApi.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +55,7 @@ builder.Services.AddTransient<IGunCategoryIdFactory, EfGunCategoryIdFactory>();
 builder.Services.AddTransient<IBulletRepository, EfBulletRepository>();
 builder.Services.AddTransient<IBulletIdFactory, EfBulletIdFactory>();
 builder.Services.AddTransient<IFileManager, FSFileManager>();
+builder.Services.AddTransient<IUserRepository, DummyUserRepository>();
 
 builder.Services.AddTransient<IGunImageRepository, FSGunImageRepository>();
 
@@ -71,9 +78,14 @@ builder.Services.AddScoped<UpdateGunApplicationService>();
 
 builder.Services.AddScoped<GunImageUploadApplicationService>();
 
+builder.Services.AddScoped<LoginUserApplicationService>();
+
 //Filter
 builder.Services.AddScoped<ExceptionFilter>();
 builder.Services.AddScoped<LoggingFilter>();
+
+//Jwt
+builder.Services.AddScoped<JwtHandler>();
 
 //Json
 builder.Services.AddControllers(options =>
@@ -86,13 +98,36 @@ builder.Services.AddControllers(options =>
     options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
 });
 
+//Auth
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        RequireExpirationTime = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+            builder.Configuration["JwtSettings:SecurityKey"]!
+        ))
+    };
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
 }
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
@@ -100,3 +135,19 @@ app.Run();
 
 
 public partial class Program { }
+
+public class DummyUserRepository : IUserRepository
+{
+    public async Task<bool> CheckPasswordAsync(UserId id, Password password)
+    {
+        return true;
+    }
+
+    public Task<User?> FetchAsync(UserId id)
+    {
+        return Task<User?>.Run(() =>
+        {
+            return new User(new UserId("test"), [new UserRole("Admin")]);
+        });
+    }
+}
