@@ -52,7 +52,7 @@ public class JwtHandler
     {
         List<Claim> claims = new List<Claim>()
         {
-            new Claim(ClaimTypes.Name, user.UserId.Value)
+            new Claim(ClaimTypes.NameIdentifier, user.UserId.Value)
         };
 
         user.Roles.ForEach(x =>

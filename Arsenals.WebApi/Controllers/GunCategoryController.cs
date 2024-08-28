@@ -1,9 +1,12 @@
+using System.Security.Claims;
 using Arsenals.ApplicationServices.Guns;
 using Arsenals.Domains.Guns.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Arsenals.WebApi.Controllers;
 
+[Authorize]
 [Route("api/categories")]
 [ApiController]
 public class GunCategoryController : ControllerBase
@@ -17,6 +20,7 @@ public class GunCategoryController : ControllerBase
         _registryGunCategoryApplicationService = registryGunCategoryApplicationService;
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<BaseResponse<RegistryGunCategoryResponseDto>>> RegistryAsync([FromBody] RegistryGunCategoryRequestDto request)
     {
@@ -24,6 +28,9 @@ public class GunCategoryController : ControllerBase
 
         try
         {
+            //TODO テスト用にユーザーID取得
+            var userId = User.Claims.SingleOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
             RegistryGunCategoryResponseDto response = await _registryGunCategoryApplicationService.ExecuteAsync(request);
             return this.Created(BaseResponse<RegistryGunCategoryResponseDto>.CreateSuccess(response));
         }
