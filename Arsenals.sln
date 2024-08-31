@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.Infrastructure.Ef"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.WebApi.Tests", "Arsenals.WebApi.Tests\Arsenals.WebApi.Tests.csproj", "{04344CC6-BA93-4C2F-8F79-E8DCF3C5C7F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.Desktop", "Arsenals.Desktop\Arsenals.Desktop.csproj", "{B1F2B17E-9D6A-427F-9460-6966FB3C38C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{04344CC6-BA93-4C2F-8F79-E8DCF3C5C7F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04344CC6-BA93-4C2F-8F79-E8DCF3C5C7F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04344CC6-BA93-4C2F-8F79-E8DCF3C5C7F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1F2B17E-9D6A-427F-9460-6966FB3C38C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1F2B17E-9D6A-427F-9460-6966FB3C38C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1F2B17E-9D6A-427F-9460-6966FB3C38C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1F2B17E-9D6A-427F-9460-6966FB3C38C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

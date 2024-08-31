@@ -1,0 +1,9 @@
+﻿namespace Arsenals.Desktop;
+
+public partial class AppShell : Shell
+{
+	public AppShell()
+	{
+		InitializeComponent();
+	}
+}
