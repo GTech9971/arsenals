@@ -14,11 +14,11 @@
                 SemanticProperties.Description="dot net bot in a race car number eight"/>
 
             <Label
-                Text="Hello, World!"
+                Text="Hello, World!!"
                 Style="{StaticResource Headline}"
                 SemanticProperties.HeadingLevel="Level1"/>
 
-            <Label Text="New HELLO AA  ff"></Label>
+
 
             <Label
                 Text="Welcome to &#10;.NET Multi-platform App UI"
@@ -32,6 +32,11 @@
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnCounterClicked"
                 HorizontalOptions="Fill"/>
+
+            <Button
+                x:Name="GunCategoryBtn"
+                Text="Go to GunCategory"
+                Clicked="OnClickGunCategoryPage"/>
         </VerticalStackLayout>
     </ScrollView>
 

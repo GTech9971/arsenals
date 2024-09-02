@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Arsenals.Desktop.Views"
+             x:Class="Arsenals.Desktop.Views.RegistryGunCategoryPage"
+             Title="銃カテゴリー登録">
+
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="登録"
+                     Order="Primary"
+                     Priority="0"
+                     Command="{Binding OnClickSubmitButton}"/>
+    </ContentPage.ToolbarItems>
+
+    <VerticalStackLayout Margin="20"
+                         Spacing="6"
+                         BackgroundColor="Gray">
+
+
+
+        <HorizontalStackLayout Spacing="20"
+                               Margin="20"
+                               BackgroundColor="BlueViolet">
+
+            <Label Text="カテゴリー名"
+                   VerticalTextAlignment="Center"/>
+
+            <Entry  Text="{Binding Name}"
+                    Placeholder="カテゴリー名"
+                    WidthRequest="200"/>
+        </HorizontalStackLayout>
+
+
+    </VerticalStackLayout>
+
+</ContentPage>

@@ -1,11 +1,18 @@
-﻿namespace Arsenals.Desktop;
+﻿using Arsenals.Desktop.Views;
+
+namespace Arsenals.Desktop;
 
 public partial class MainPage : ContentPage
 {
 	int count = 0;
 
-	public MainPage()
+	private readonly RegistryGunCategoryPage _registryGunCategoryPage;
+
+	public MainPage(RegistryGunCategoryPage registryGunCategoryPage)
 	{
+		ArgumentNullException.ThrowIfNull(registryGunCategoryPage, nameof(registryGunCategoryPage));
+		_registryGunCategoryPage = registryGunCategoryPage;
+
 		InitializeComponent();
 	}
 
@@ -19,6 +26,11 @@ public partial class MainPage : ContentPage
 			CounterBtn.Text = $"Clicked {count} times";
 
 		SemanticScreenReader.Announce(CounterBtn.Text);
+	}
+
+	private async void OnClickGunCategoryPage(object sender, EventArgs e)
+	{
+		await Navigation.PushAsync(_registryGunCategoryPage);
 	}
 }
 
