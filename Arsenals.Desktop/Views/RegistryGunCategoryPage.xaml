@@ -10,7 +10,7 @@
         <ToolbarItem Text="登録"
                      Order="Primary"
                      Priority="0"
-                     Command="{Binding OnClickSubmitButton}"/>
+                     Command="{Binding SubmitCommand}"/>
     </ContentPage.ToolbarItems>
 
     <VerticalStackLayout Margin="20"
@@ -30,7 +30,7 @@
         </HorizontalStackLayout>
 
         <ListView ItemsSource="{Binding GunNames}"
-                Margin="20">
+                  Margin="20">
             <ListView.Header>
                 <Label Text="登録済み銃カテゴリーリスト"/>
             </ListView.Header>

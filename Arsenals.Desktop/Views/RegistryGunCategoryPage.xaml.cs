@@ -1,18 +1,14 @@
-using Arsenals.ApplicationServices.Guns;
-
 namespace Arsenals.Desktop.Views;
 
 public partial class RegistryGunCategoryPage : ContentPage
 {
-	private readonly RegistryGunCategoryApplicationService _registryGunCategoryApplicationService;
-
-	public RegistryGunCategoryPage(RegistryGunCategoryApplicationService registryGunCategoryApplicationService)
+	public RegistryGunCategoryPage(RegistryGunCategoryViewModel viewModel)
 	{
-		ArgumentNullException.ThrowIfNull(registryGunCategoryApplicationService, nameof(registryGunCategoryApplicationService));
-		_registryGunCategoryApplicationService = registryGunCategoryApplicationService;
+		ArgumentNullException.ThrowIfNull(viewModel, nameof(viewModel));
 
 		InitializeComponent();
 
-		this.BindingContext = new RegistryGunCategoryViewModel(_registryGunCategoryApplicationService);
+		BindingContext = viewModel;
+		_ = viewModel.FetchCategoryAsync();
 	}
 }

@@ -1,54 +1,52 @@
-using System.Diagnostics;
-using System.Windows.Input;
 using Arsenals.ApplicationServices.Guns;
-using Prism.Commands;
+using Arsenals.ApplicationServices.Guns.Dto;
+using Arsenals.Domains.Guns.Exceptions;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Arsenals.Desktop.Views;
 
-public class RegistryGunCategoryViewModel : Prism.Mvvm.BindableBase
+public partial class RegistryGunCategoryViewModel : ObservableObject
 {
+    private readonly FetchGunCategoryApplicationService _fetchGunCategoryApplicationService;
     private readonly RegistryGunCategoryApplicationService _registryGunCategoryApplicationService;
 
+    [ObservableProperty]
     private string _name = "";
 
-    public string Name
+    [ObservableProperty]
+    private IEnumerable<string> _gunNames = [];
+
+
+    public async Task FetchCategoryAsync()
     {
-        get => _name;
-        set => SetProperty(ref _name, value, nameof(Name));
+        IAsyncEnumerable<GunCategoryDto> categories = _fetchGunCategoryApplicationService.ExecuteAsync();
+        GunNames = await categories
+                            .Select(x => x.Name)
+                            .ToListAsync();
     }
 
-    private IEnumerable<string> _gunNames = ["A", "B"];
-    public IEnumerable<string> GunNames
+    [RelayCommand]
+    private async Task SubmitAsync()
     {
-        get => _gunNames;
-    }
-
-    public ICommand OnClickSubmitButton { get; private set; }
-
-    public RegistryGunCategoryViewModel(RegistryGunCategoryApplicationService registryGunCategoryApplicationService)
-    {
-        ArgumentNullException.ThrowIfNull(registryGunCategoryApplicationService, nameof(registryGunCategoryApplicationService));
-        _registryGunCategoryApplicationService = registryGunCategoryApplicationService;
-
-
-
-        OnClickSubmitButton = new DelegateCommand(async () =>
+        RegistryGunCategoryRequestDto request = new RegistryGunCategoryRequestDto() { Name = Name };
+        try
         {
-            RegistryGunCategoryRequestDto requestDto = new RegistryGunCategoryRequestDto()
-            {
-                Name = Name
-            };
+            RegistryGunCategoryResponseDto response = await _registryGunCategoryApplicationService.ExecuteAsync(request);
+        }
+        catch (DuplicateGunCategoryNameException ex)
+        {
+            //TODO
+        }
+    }
 
-            try
-            {
-                RegistryGunCategoryResponseDto responseDto = await _registryGunCategoryApplicationService.ExecuteAsync(requestDto);
-                Debug.WriteLine(responseDto);
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "Cancel");
-                throw;
-            }
-        });
+    public RegistryGunCategoryViewModel(FetchGunCategoryApplicationService fetchGunCategoryApplicationService,
+                                            RegistryGunCategoryApplicationService registryGunCategoryApplicationService)
+    {
+        ArgumentNullException.ThrowIfNull(fetchGunCategoryApplicationService, nameof(fetchGunCategoryApplicationService));
+        ArgumentNullException.ThrowIfNull(registryGunCategoryApplicationService, nameof(registryGunCategoryApplicationService));
+
+        _fetchGunCategoryApplicationService = fetchGunCategoryApplicationService;
+        _registryGunCategoryApplicationService = registryGunCategoryApplicationService;
     }
 }
