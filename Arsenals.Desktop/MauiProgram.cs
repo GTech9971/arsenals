@@ -96,11 +96,11 @@ public static class MauiProgram
 		builder.Services.AddScoped<LoginUserApplicationService>();
 
 		//ViewModel
-		builder.Services.AddTransient<RegistryGunCategoryViewModel>();
+		builder.Services.AddTransient<GunCategoryViewModel>();
 
 		//ページ
 		builder.Services.AddTransient<MainPage>();
-		builder.Services.AddTransient<RegistryGunCategoryPage>();
+		builder.Services.AddTransient<GunCategoryPage>();
 
 
 #if DEBUG

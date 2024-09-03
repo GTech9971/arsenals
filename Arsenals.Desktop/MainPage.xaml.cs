@@ -6,12 +6,12 @@ public partial class MainPage : ContentPage
 {
 	int count = 0;
 
-	private readonly RegistryGunCategoryPage _registryGunCategoryPage;
+	private readonly GunCategoryPage _gunCategoryPage;
 
-	public MainPage(RegistryGunCategoryPage registryGunCategoryPage)
+	public MainPage(GunCategoryPage gunCategoryPage)
 	{
-		ArgumentNullException.ThrowIfNull(registryGunCategoryPage, nameof(registryGunCategoryPage));
-		_registryGunCategoryPage = registryGunCategoryPage;
+		ArgumentNullException.ThrowIfNull(gunCategoryPage, nameof(gunCategoryPage));
+		_gunCategoryPage = gunCategoryPage;
 
 		InitializeComponent();
 	}
@@ -30,7 +30,7 @@ public partial class MainPage : ContentPage
 
 	private async void OnClickGunCategoryPage(object sender, EventArgs e)
 	{
-		await Navigation.PushAsync(_registryGunCategoryPage);
+		await Navigation.PushAsync(_gunCategoryPage);
 	}
 }
 

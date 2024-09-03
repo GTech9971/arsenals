@@ -83,4 +83,10 @@
 	  <ProjectReference Include="..\Arsenals.Domains\Arsenals.Domains.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Views/GunCategoryPage.xaml.cs">
+	    <DependentUpon>GunCategoryPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
 </Project>

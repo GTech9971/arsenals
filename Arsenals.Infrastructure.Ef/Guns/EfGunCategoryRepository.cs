@@ -26,6 +26,8 @@ public class EfGunCategoryRepository : IGunCategoryRepository
                                         .Where(x => x.Id == id.Value)
                                         .SingleAsync();
         _context.Remove(data);
+
+        await _context.SaveChangesAsync();
     }
 
     public IAsyncEnumerable<GunCategory> FetchAll()

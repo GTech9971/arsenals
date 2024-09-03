@@ -2,43 +2,62 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Arsenals.Desktop.Views"
-             x:Class="Arsenals.Desktop.Views.RegistryGunCategoryPage"
-             Title="銃カテゴリー登録">
+             x:Class="Arsenals.Desktop.Views.GunCategoryPage"
+             Title="銃カテゴリー">
 
 
     <ContentPage.ToolbarItems>
+
         <ToolbarItem Text="登録"
                      Order="Primary"
-                     Priority="0"
+                     Priority="1"
                      Command="{Binding SubmitCommand}"/>
+
+
+        <ToolbarItem Text="削除"
+                     Order="Secondary"
+                     Priority="0"
+                     Command="{Binding DeleteCommand}"/>
+
     </ContentPage.ToolbarItems>
 
     <VerticalStackLayout Margin="20"
                          Spacing="6">
 
 
+        <Label Text="新規登録"
+               FontSize="Header"/>
 
         <HorizontalStackLayout Spacing="20"
                                Margin="20">
 
+
             <Label Text="カテゴリー名"
                    VerticalTextAlignment="Center"/>
 
-            <Entry  Text="{Binding Name}"
+            <Entry  Text="{Binding RegistryName}"
                     Placeholder="カテゴリー名"
                     WidthRequest="200"/>
         </HorizontalStackLayout>
 
-        <ListView ItemsSource="{Binding GunNames}"
+        <Line/>
+
+        <Label Text="登録済 銃カテゴリー"
+               FontSize="Header"/>
+
+        <ListView ItemsSource="{Binding Categories}"
+                  SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
                   Margin="20">
-            <ListView.Header>
+            <!-- <ListView.Header>
                 <Label Text="登録済み銃カテゴリーリスト"/>
-            </ListView.Header>
+            </ListView.Header> -->
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Label Text="{Binding}">
-                        </Label>
+
+                        <Label Text="{Binding Name}"
+                               FontSize="Body"/>
+
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
