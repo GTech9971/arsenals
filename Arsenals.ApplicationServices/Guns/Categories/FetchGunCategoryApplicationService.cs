@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+using Arsenals.ApplicationServices.Guns.Dto;
 using Arsenals.Domains.Guns;
 using AutoMapper;
 
@@ -21,30 +21,10 @@ public class FetchGunCategoryApplicationService
         _mapper = mapper;
     }
 
-    public IAsyncEnumerable<FetchGunCategoryResponseDto> Execute()
+    public IAsyncEnumerable<GunCategoryDto> ExecuteAsync()
     {
         IAsyncEnumerable<GunCategory> categories = _repository.FetchAll();
         return categories
-                .Select(x => _mapper.Map<FetchGunCategoryResponseDto>(x));
-    }
-}
-
-
-public class FetchGunCategoryResponseDto
-{
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = null!;
-}
-
-public class FetchGunCategoryResponseDtoMappingProfile : Profile
-{
-    public FetchGunCategoryResponseDtoMappingProfile()
-    {
-        CreateMap<GunCategory, FetchGunCategoryResponseDto>()
-        .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id.Value))
-        .ForMember(dst => dst.Name, opt => opt.MapFrom(src => src.Name.Value));
+                .Select(x => _mapper.Map<GunCategoryDto>(x));
     }
 }

@@ -10,6 +10,13 @@ public class GunCategoryControllerTest : BaseControllerTest
     public GunCategoryControllerTest(PostgreSqlTest fixture) : base(fixture) { }
 
     [Fact]
+    public async void fetch()
+    {
+        using HttpResponseMessage response = await _client.GetAsync("/api/categories");
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+    }
+
+    [Fact]
     public async void registry_gun_category()
     {
         RegistryGunCategoryRequestDto request = new RegistryGunCategoryRequestDto()
