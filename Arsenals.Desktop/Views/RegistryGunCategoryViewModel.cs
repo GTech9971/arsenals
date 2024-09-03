@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Windows.Input;
 using Arsenals.ApplicationServices.Guns;
 using Prism.Commands;
@@ -16,12 +17,20 @@ public class RegistryGunCategoryViewModel : Prism.Mvvm.BindableBase
         set => SetProperty(ref _name, value, nameof(Name));
     }
 
+    private IEnumerable<string> _gunNames = ["A", "B"];
+    public IEnumerable<string> GunNames
+    {
+        get => _gunNames;
+    }
+
     public ICommand OnClickSubmitButton { get; private set; }
 
     public RegistryGunCategoryViewModel(RegistryGunCategoryApplicationService registryGunCategoryApplicationService)
     {
         ArgumentNullException.ThrowIfNull(registryGunCategoryApplicationService, nameof(registryGunCategoryApplicationService));
         _registryGunCategoryApplicationService = registryGunCategoryApplicationService;
+
+
 
         OnClickSubmitButton = new DelegateCommand(async () =>
         {
@@ -30,8 +39,16 @@ public class RegistryGunCategoryViewModel : Prism.Mvvm.BindableBase
                 Name = Name
             };
 
-            RegistryGunCategoryResponseDto responseDto = await _registryGunCategoryApplicationService.ExecuteAsync(requestDto);
-            Console.WriteLine(responseDto);
+            try
+            {
+                RegistryGunCategoryResponseDto responseDto = await _registryGunCategoryApplicationService.ExecuteAsync(requestDto);
+                Debug.WriteLine(responseDto);
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "Cancel");
+                throw;
+            }
         });
     }
 }

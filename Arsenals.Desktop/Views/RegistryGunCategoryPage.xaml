@@ -14,14 +14,12 @@
     </ContentPage.ToolbarItems>
 
     <VerticalStackLayout Margin="20"
-                         Spacing="6"
-                         BackgroundColor="Gray">
+                         Spacing="6">
 
 
 
         <HorizontalStackLayout Spacing="20"
-                               Margin="20"
-                               BackgroundColor="BlueViolet">
+                               Margin="20">
 
             <Label Text="カテゴリー名"
                    VerticalTextAlignment="Center"/>
@@ -30,6 +28,21 @@
                     Placeholder="カテゴリー名"
                     WidthRequest="200"/>
         </HorizontalStackLayout>
+
+        <ListView ItemsSource="{Binding GunNames}"
+                Margin="20">
+            <ListView.Header>
+                <Label Text="登録済み銃カテゴリーリスト"/>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Label Text="{Binding}">
+                        </Label>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
 
     </VerticalStackLayout>
