@@ -17,7 +17,7 @@ public class EfGunIdFactory : IGunIdFactory
     {
         GunData? gunData = await _context.Guns
                                             .AsNoTracking()
-                                            .OrderBy(x => x.Id)
+                                            .OrderByDescending(x => x.Id)
                                             .FirstOrDefaultAsync();
 
         if (gunData == null)

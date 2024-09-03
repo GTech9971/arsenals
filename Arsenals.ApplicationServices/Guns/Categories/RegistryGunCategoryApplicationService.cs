@@ -65,7 +65,7 @@ public class RegistryGunCategoryRequestDto
 {
     [JsonPropertyName("name")]
     [JsonRequired]
-    public string Name { get; set; } = null!;
+    public required string Name { get; set; } = null!;
 }
 
 
@@ -73,7 +73,7 @@ public class RegistryGunCategoryResponseDto
 {
     [JsonPropertyName("id")]
     [JsonRequired]
-    public int Id { get; set; }
+    public required int Id { get; set; }
 }
 
 public class RegistryGunCategoryResponseDtoMappingProfile : Profile
