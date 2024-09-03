@@ -9,6 +9,22 @@
             "type": "maui",
             "request": "launch",
             "preLaunchTask": "maui: Build"
+        },
+        {
+            "name": "C# Web API",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-webapi",
+            "program": "${workspaceFolder}/Arsenals.WebApi/bin/Debug/net8.0/Arsenals.WebApi.dll",
+            "args": [
+                "--urls",
+                "http://localhost:5000"
+            ],
+            "cwd": "${workspaceFolder}/Arsenals.WebApi",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            }
         }
     ]
 }
