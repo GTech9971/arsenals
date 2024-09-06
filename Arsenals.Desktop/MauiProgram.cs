@@ -101,6 +101,8 @@ public static class MauiProgram
 		//ページ
 		builder.Services.AddTransient<MainPage>();
 		builder.Services.AddTransient<GunCategoryPage>();
+		//コンポーネント
+		builder.Services.AddTransient<GunCard>();
 
 
 #if DEBUG
