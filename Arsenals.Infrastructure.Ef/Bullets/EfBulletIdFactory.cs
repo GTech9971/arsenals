@@ -17,7 +17,7 @@ public class EfBulletIdFactory : IBulletIdFactory
     {
         BulletData? bulletData = await _context.Bullets
                                         .AsNoTracking()
-                                        .OrderBy(x => x.Id)
+                                        .OrderByDescending(x => x.Id)
                                         .FirstOrDefaultAsync();
 
         if (bulletData == null)

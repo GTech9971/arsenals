@@ -60,7 +60,7 @@ public class EfGunCategoryRepository : IGunCategoryRepository
         }
         else
         {
-            _mapper.Map<GunCategoryData, GunCategory>(found);
+            _mapper.Map(gunCategory, found);
             _context.GunCategories.Update(found);
         }
 

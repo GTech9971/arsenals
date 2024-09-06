@@ -7,7 +7,7 @@ namespace Arsenals.Infrastructure.Ef.Guns;
 
 [Table("gun_categories")]
 [DisplayName("銃のカテゴリー")]
-[Index(nameof(Name))]
+[Index(nameof(Name), IsUnique = true)]
 public class GunCategoryData
 {
     [Key]
