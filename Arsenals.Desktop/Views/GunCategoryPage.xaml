@@ -8,6 +8,11 @@
 
     <ContentPage.ToolbarItems>
 
+        <ToolbarItem Text="更新"
+                     Order="Default"
+                     Priority="2"
+                     Command="{Binding UpdateCommand}"/>
+
         <ToolbarItem Text="登録"
                      Order="Primary"
                      Priority="1"
@@ -25,7 +30,7 @@
                          Spacing="6">
 
 
-        <Label Text="新規登録"
+        <Label Text="新規登録・更新"
                FontSize="Header"/>
 
         <HorizontalStackLayout Spacing="20"
@@ -37,7 +42,8 @@
 
             <Entry  Text="{Binding RegistryName}"
                     Placeholder="カテゴリー名"
-                    WidthRequest="200"/>
+                    WidthRequest="400"
+                    MaxLength="50"/>
         </HorizontalStackLayout>
 
         <Line/>

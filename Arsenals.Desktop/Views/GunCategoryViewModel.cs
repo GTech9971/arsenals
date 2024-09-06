@@ -13,18 +13,22 @@ public partial class GunCategoryViewModel : ObservableObject
     private readonly FetchGunCategoryApplicationService _fetchGunCategoryApplicationService;
     private readonly RegistryGunCategoryApplicationService _registryGunCategoryApplicationService;
     private readonly DeleteGunCategoryApplicationService _deleteGunCategoryApplicationService;
+    private readonly UpdateGunCategoryApplicationService _updateGunCategoryApplicationService;
 
     public GunCategoryViewModel(FetchGunCategoryApplicationService fetchGunCategoryApplicationService,
                                     RegistryGunCategoryApplicationService registryGunCategoryApplicationService,
-                                    DeleteGunCategoryApplicationService deleteGunCategoryApplicationService)
+                                    DeleteGunCategoryApplicationService deleteGunCategoryApplicationService,
+                                    UpdateGunCategoryApplicationService updateGunCategoryApplicationService)
     {
         ArgumentNullException.ThrowIfNull(fetchGunCategoryApplicationService, nameof(fetchGunCategoryApplicationService));
         ArgumentNullException.ThrowIfNull(registryGunCategoryApplicationService, nameof(registryGunCategoryApplicationService));
         ArgumentNullException.ThrowIfNull(deleteGunCategoryApplicationService, nameof(deleteGunCategoryApplicationService));
+        ArgumentNullException.ThrowIfNull(updateGunCategoryApplicationService, nameof(updateGunCategoryApplicationService));
 
         _fetchGunCategoryApplicationService = fetchGunCategoryApplicationService;
         _registryGunCategoryApplicationService = registryGunCategoryApplicationService;
         _deleteGunCategoryApplicationService = deleteGunCategoryApplicationService;
+        _updateGunCategoryApplicationService = updateGunCategoryApplicationService;
     }
 
     /// <summary>
@@ -32,6 +36,7 @@ public partial class GunCategoryViewModel : ObservableObject
     /// </summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
+    [NotifyCanExecuteChangedFor(nameof(UpdateCommand))]
     private string _registryName = "";
 
     [ObservableProperty]
@@ -50,10 +55,16 @@ public partial class GunCategoryViewModel : ObservableObject
     private bool CanExecuteDelete => SelectedCategory != null;
 
     /// <summary>
+    /// 更新可能かどうか
+    /// </summary>
+    private bool CanExecuteUpdate => CanExecuteSubmit && CanExecuteDelete;
+
+    /// <summary>
     /// 選択済みのカテゴリー
     /// </summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
+    [NotifyCanExecuteChangedFor(nameof(UpdateCommand))]
     private GunCategoryDto? _selectedCategory;
 
 
@@ -102,12 +113,45 @@ public partial class GunCategoryViewModel : ObservableObject
         }
     }
 
-
-
-    public async Task FetchCategoryAsync()
+    /// <summary>
+    /// 選択したカテゴリーを更新する
+    /// </summary>
+    /// <returns></returns>
+    [RelayCommand(CanExecute = nameof(CanExecuteUpdate))]
+    private async Task UpdateAsync()
     {
-        IAsyncEnumerable<GunCategoryDto> categories = _fetchGunCategoryApplicationService.ExecuteAsync();
-        Categories = await categories
-                            .ToListAsync();
+        ArgumentNullException.ThrowIfNull(SelectedCategory, nameof(SelectedCategory));
+
+        try
+        {
+            UpdateGunCategoryRequestDto request = new UpdateGunCategoryRequestDto()
+            {
+                Name = RegistryName
+            };
+            await _updateGunCategoryApplicationService.ExecuteAsync(SelectedCategory.Id, ["name"], request);
+            WeakReferenceMessenger.Default.Send(new SuccessMessage($"更新に成功しました。ID:{SelectedCategory.Id}"));
+
+            await FetchCategoryAsync();
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ErrorMessage(ex));
+        }
+    }
+
+
+
+    internal async Task FetchCategoryAsync()
+    {
+        try
+        {
+            IAsyncEnumerable<GunCategoryDto> categories = _fetchGunCategoryApplicationService.ExecuteAsync();
+            Categories = await categories
+                                .ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            WeakReferenceMessenger.Default.Send(new ErrorMessage(ex));
+        }
     }
 }

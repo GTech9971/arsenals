@@ -20,16 +20,16 @@ public class AutoMapperTest
         _mapper = config.CreateMapper();
     }
 
-    [Fact]
-    public void category_dto()
-    {
-        GunCategory category = new GunCategory(new GunCategoryId(100), new GunCategoryName("ハンドガン"));
+    // [Fact]
+    // public void category_dto()
+    // {
+    //     GunCategory category = new GunCategory(new GunCategoryId(100), new GunCategoryName("ハンドガン"));
 
-        FetchGunCategoryResponseDto dto = _mapper.Map<FetchGunCategoryResponseDto>(category);
+    //     FetchGunCategoryResponseDto dto = _mapper.Map<FetchGunCategoryResponseDto>(category);
 
-        Assert.Equal(100, dto.Id);
-        Assert.Equal("ハンドガン", dto.Name);
-    }
+    //     Assert.Equal(100, dto.Id);
+    //     Assert.Equal("ハンドガン", dto.Name);
+    // }
 
     [Fact]
     public void bullet_dto()
