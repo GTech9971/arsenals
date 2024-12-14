@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Arsenals.WebApi.Tests;
 
-[Collection("TestContainer Collection")]
 public class GunControllerTest : BaseControllerTest
 {
     public GunControllerTest(PostgreSqlTest fixture) : base(fixture) { }

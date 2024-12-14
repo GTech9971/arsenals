@@ -16,7 +16,7 @@
             }
         },
         {
-            "label": "Test - applicationServices",
+            "label": "Test - ApplicationServices",
             "detail": "アプリケーションサービスのテスト",
             "command": "dotnet",
             "type": "process",
@@ -24,6 +24,22 @@
             "args": [
                 "test",
                 "${workspaceFolder}/Arsenals.ApplicationServices.Tests/Arsenals.ApplicationServices.Tests.csproj",
+                "--collect:",
+                "XPlat Code Coverage",
+                "--logger",
+                "trx;LogFileName=TestResult.trx"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Test - WebApi",
+            "detail": "WebApiのテスト",
+            "command": "dotnet",
+            "type": "process",
+            "group": "test",
+            "args": [
+                "test",
+                "${workspaceFolder}/Arsenals.WebApi.Tests/Arsenals.WebApi.Tests.csproj",
                 "--collect:",
                 "XPlat Code Coverage",
                 "--logger",

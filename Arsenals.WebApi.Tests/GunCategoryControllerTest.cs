@@ -4,7 +4,6 @@ using Arsenals.ApplicationServices.Guns;
 
 namespace Arsenals.WebApi.Tests;
 
-[Collection("TestContainer Gun Category Controller")]
 public class GunCategoryControllerTest : BaseControllerTest
 {
     public GunCategoryControllerTest(PostgreSqlTest fixture) : base(fixture) { }
