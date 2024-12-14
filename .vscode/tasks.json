@@ -14,6 +14,94 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Test - applicationServices",
+            "detail": "アプリケーションサービスのテスト",
+            "command": "dotnet",
+            "type": "process",
+            "group": "test",
+            "args": [
+                "test",
+                "${workspaceFolder}/Arsenals.ApplicationServices.Tests/Arsenals.ApplicationServices.Tests.csproj",
+                "--collect:",
+                "XPlat Code Coverage",
+                "--logger",
+                "trx;LogFileName=TestResult.trx"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Generate Test Results",
+            "detail": "テスト結果をhtmlで出力",
+            "group": "test",
+            "command": "reportgenerator",
+            "type": "shell",
+            "args": [
+                "-reports:\"${workspaceFolder}/**/TestResults/**/coverage.cobertura.xml\"",
+                "-targetdir:TestReport",
+                "-reporttypes:Html"
+            ],
+            "dependsOn": [
+                "Test - applicationServices"
+            ]
+        },
+        {
+            "label": "Publish WebAPI",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "publish",
+                "${workspaceFolder}/Arsenals.WebApi/Arsenals.WebApi.csproj",
+                "--configuration",
+                "Release",
+                "/p:EnvironmentName=${input:environment}"
+            ],
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "Migration",
+            "command": "$env:DOTNET_ENVIRONMENT='${input:environment}';dotnet",
+            "type": "shell",
+            "args": [
+                "ef",
+                "migrations",
+                "add",
+                "${input:migrationName}",
+                "--project",
+                "${workspaceFolder}/Arsenals.Infrastructure.Ef/Arsenals.Infrastructure.Ef.csproj",
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Migration:Apply",
+            "command": "$env:DOTNET_ENVIRONMENT='${input:environment}';dotnet",
+            "type": "shell",
+            "args": [
+                "ef",
+                "database",
+                "update",
+                "--project",
+                "${workspaceFolder}/Arsenals.Infrastructure.Ef/Arsenals.Infrastructure.Ef.csproj",
+            ],
+            "problemMatcher": "$msCompile"
+        },
+    ],
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "migrationName",
+            "description": "マイグレーション名",
+        },
+        {
+            "type": "pickString",
+            "id": "environment",
+            "description": "環境変数",
+            "options": [
+                "Development",
+                "Staging",
+                "Production"
+            ]
         }
     ]
 }
