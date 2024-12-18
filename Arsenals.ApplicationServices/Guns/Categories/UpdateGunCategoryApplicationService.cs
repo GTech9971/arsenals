@@ -33,7 +33,7 @@ public class UpdateGunCategoryApplicationService
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="GunCategoryNotFoundException"></exception>
-    public async Task ExecuteAsync(int categoryId, IEnumerable<string> fieldMasks, UpdateGunCategoryRequestDto request)
+    public async Task ExecuteAsync(string categoryId, IEnumerable<string> fieldMasks, UpdateGunCategoryRequestDto request)
     {
         ArgumentNullException.ThrowIfNull(fieldMasks, nameof(fieldMasks));
         ArgumentNullException.ThrowIfNull(request, nameof(request));

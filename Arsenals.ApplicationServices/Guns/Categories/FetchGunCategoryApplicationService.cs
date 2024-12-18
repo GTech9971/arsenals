@@ -23,7 +23,7 @@ public class FetchGunCategoryApplicationService
 
     public IAsyncEnumerable<GunCategoryDto> ExecuteAsync()
     {
-        IAsyncEnumerable<GunCategory> categories = _repository.FetchAll();
+        IAsyncEnumerable<GunCategory> categories = _repository.FetchAllAsync();
         return categories
                 .Select(x => _mapper.Map<GunCategoryDto>(x));
     }

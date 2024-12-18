@@ -42,7 +42,7 @@ public class BulletService
     {
         ArgumentNullException.ThrowIfNull(bulletId, nameof(bulletId));
 
-        IAsyncEnumerable<Gun> guns = _gunRepository.FetchAll();
+        IAsyncEnumerable<Gun> guns = _gunRepository.FetchAllAsync();
         //弾丸を使用している
         //削除対象の弾丸のみ紐づいている場合、削除不可
         return await guns

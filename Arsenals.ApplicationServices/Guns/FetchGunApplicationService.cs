@@ -29,7 +29,7 @@ public class FetchGunApplicationService
     /// <param name="gunIdVal"></param>
     /// <returns></returns>
     /// <exception cref="GunNotFoundException"></exception>
-    public async Task<GunDto> ExecuteAsync(int gunIdVal)
+    public async Task<GunDto> ExecuteAsync(string gunIdVal)
     {
         GunId gunId = new GunId(gunIdVal);
 

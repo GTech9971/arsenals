@@ -25,7 +25,7 @@ public class DeleteGunApplicationServiceTest
 
         DeleteGunApplicationService sut = new DeleteGunApplicationService(gunRepositoryMock.Object);
 
-        await sut.ExecuteAsync(100);
+        await sut.ExecuteAsync("G-1000");
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class DeleteGunApplicationServiceTest
 
         await Assert.ThrowsAsync<GunNotFoundException>(async () =>
         {
-            await sut.ExecuteAsync(100);
+            await sut.ExecuteAsync("G-1000");
         });
     }
 }

@@ -43,7 +43,7 @@ public class GunImageUploadApplicationService
     /// <param name="data"></param>
     /// <returns></returns>
     /// <exception cref="GunNotFoundException"></exception>
-    public async Task<Uri> ExecuteAsync(int gunIdVal, MemoryStream data)
+    public async Task<Uri> ExecuteAsync(string gunIdVal, MemoryStream data)
     {
         ArgumentNullException.ThrowIfNull(data, nameof(data));
 

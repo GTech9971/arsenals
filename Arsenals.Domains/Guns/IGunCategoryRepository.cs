@@ -5,7 +5,7 @@ namespace Arsenals.Domains.Guns;
 /// </summary>
 public interface IGunCategoryRepository
 {
-    IAsyncEnumerable<GunCategory> FetchAll();
+    IAsyncEnumerable<GunCategory> FetchAllAsync();
 
     Task<GunCategory?> FetchAsync(GunCategoryId id);
 

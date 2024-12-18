@@ -33,7 +33,7 @@ public class FetchAllGunApplicationServiceTest
     public async void fetch_empty()
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
-        gunRepositoryMock.Setup(x => x.FetchAll()).Returns(AsyncEnumerable.Empty<Gun>());
+        gunRepositoryMock.Setup(x => x.FetchAllAsync()).Returns(AsyncEnumerable.Empty<Gun>());
 
         Mock<IConfiguration> configurationMock = new Mock<IConfiguration>();
         configurationMock.Setup(x => x["images:root"]).Returns("dummy");
@@ -52,7 +52,7 @@ public class FetchAllGunApplicationServiceTest
     public async void fetch_any()
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
-        gunRepositoryMock.Setup(x => x.FetchAll()).Returns(new List<Gun>() { _dummyGunBuilder.Build(), _dummyGunBuilder.Build() }.ToAsyncEnumerable());
+        gunRepositoryMock.Setup(x => x.FetchAllAsync()).Returns(new List<Gun>() { _dummyGunBuilder.Build(), _dummyGunBuilder.Build() }.ToAsyncEnumerable());
 
         Mock<IConfiguration> configurationMock = new Mock<IConfiguration>();
         configurationMock.Setup(x => x["images:root"]).Returns("dummy");
@@ -69,12 +69,12 @@ public class FetchAllGunApplicationServiceTest
     }
 
     [Theory]
-    [InlineData(100, 2)]
-    [InlineData(200, 0)]
-    public async void fetch_filter(int gunCategoryIdVal, int expected)
+    [InlineData("G-1000", 2)]
+    [InlineData("G-2000", 0)]
+    public async void fetch_filter(string gunCategoryIdVal, int expected)
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
-        gunRepositoryMock.Setup(x => x.FetchAll()).Returns(new List<Gun>() { _dummyGunBuilder.Build(), _dummyGunBuilder.Build() }.ToAsyncEnumerable());
+        gunRepositoryMock.Setup(x => x.FetchAllAsync()).Returns(new List<Gun>() { _dummyGunBuilder.Build(), _dummyGunBuilder.Build() }.ToAsyncEnumerable());
 
         Mock<IConfiguration> configurationMock = new Mock<IConfiguration>();
         configurationMock.Setup(x => x["images:root"]).Returns("dummy");

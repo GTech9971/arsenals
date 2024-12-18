@@ -6,9 +6,9 @@ public class DummyBulletBuilder
 {
     public Bullet Build()
     {
-        return new Bullet(new BulletId(100), new BulletName("9mm"), new Damage(3));
+        return new Bullet(new BulletId("B-1000"), new BulletName("9mm"), new Damage(3));
     }
-    public Bullet Build(int bulletIdVal)
+    public Bullet Build(string bulletIdVal)
     {
         return new Bullet(new BulletId(bulletIdVal), new BulletName("45ACP"), new Damage(4));
     }

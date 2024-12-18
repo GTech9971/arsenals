@@ -51,7 +51,7 @@ public class UpdateGunApplicationService
     /// <exception cref="DuplicateGunNameException"></exception>
     /// <exception cref="GunCategoryNotFoundException"></exception>
     /// <exception cref="BulletNotFoundException"></exception>
-    public async Task<GunDto> ExecuteAsync(int gunIdVal, IEnumerable<string> fieldMasks, UpdateGunRequestDto request)
+    public async Task<GunDto> ExecuteAsync(string gunIdVal, IEnumerable<string> fieldMasks, UpdateGunRequestDto request)
     {
         ArgumentNullException.ThrowIfNull(fieldMasks, nameof(fieldMasks));
         ArgumentNullException.ThrowIfNull(request, nameof(request));
@@ -80,7 +80,7 @@ public class UpdateGunApplicationService
         //カテゴリー
         if (updateGunCommand.Category != null)
         {
-            GunCategoryId gunCategoryId = new GunCategoryId((int)updateGunCommand.Category);
+            GunCategoryId gunCategoryId = new GunCategoryId(updateGunCommand.Category);
             GunCategory? gunCategory = await _gunCategoryRepository.FetchAsync(gunCategoryId);
             if (gunCategory == null)
             {
@@ -165,11 +165,11 @@ public class UpdateGunCommand
 
     public string? Name { get; private set; }
 
-    public int? Category { get; private set; }
+    public string? Category { get; private set; }
 
     public int? Capacity { get; private set; }
 
-    public IEnumerable<int>? Bullets { get; private set; }
+    public IEnumerable<string>? Bullets { get; private set; }
 }
 
 public class UpdateGunRequestDto
@@ -178,11 +178,11 @@ public class UpdateGunRequestDto
     public string? Name { get; set; }
 
     [JsonPropertyName("category")]
-    public int? Category { get; set; }
+    public string? Category { get; set; }
 
     [JsonPropertyName("capacity")]
     public int? Capacity { get; set; }
 
     [JsonPropertyName("bullets")]
-    public IEnumerable<int>? Bullets { get; set; }
+    public IEnumerable<string>? Bullets { get; set; }
 }

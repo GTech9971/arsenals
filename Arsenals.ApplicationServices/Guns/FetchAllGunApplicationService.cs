@@ -44,16 +44,16 @@ public class FetchAllGunApplicationService
     /// </summary>
     /// <param name="gunCategoryIdVal"></param>
     /// <returns></returns>
-    public IAsyncEnumerable<GunDto> Execute(int? gunCategoryIdVal)
+    public IAsyncEnumerable<GunDto> Execute(string? gunCategoryIdVal)
     {
         _logger.LogInformation($"Execute(gunCategoryIdVal = {gunCategoryIdVal}) - Start");
         //_logger.LogMethodStart(() => { };
 
-        IAsyncEnumerable<Gun> guns = _repository.FetchAll();
+        IAsyncEnumerable<Gun> guns = _repository.FetchAllAsync();
 
         if (gunCategoryIdVal != null)
         {
-            GunCategoryId gunCategoryId = new GunCategoryId((int)gunCategoryIdVal);
+            GunCategoryId gunCategoryId = new GunCategoryId(gunCategoryIdVal);
             guns = guns
                     .Where(x => x.Category.Id.Equals(gunCategoryId));
         }

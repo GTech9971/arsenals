@@ -24,7 +24,7 @@ public class DeleteGunApplicationService
     /// <param name="gunIdVal"></param>
     /// <returns></returns>
     /// <exception cref="GunNotFoundException"></exception>
-    public async Task ExecuteAsync(int gunIdVal)
+    public async Task ExecuteAsync(string gunIdVal)
     {
         GunId gunId = new GunId(gunIdVal);
 

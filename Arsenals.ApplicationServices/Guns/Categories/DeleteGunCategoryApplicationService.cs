@@ -30,7 +30,7 @@ public class DeleteGunCategoryApplicationService
     /// <returns></returns>
     /// <exception cref="GunCategoryNotFoundException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
-    public async Task ExecuteAsync(int categoryId)
+    public async Task ExecuteAsync(string categoryId)
     {
         GunCategoryId gunCategoryId = new GunCategoryId(categoryId);
 

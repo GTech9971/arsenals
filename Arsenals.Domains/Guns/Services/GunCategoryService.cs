@@ -26,7 +26,7 @@ public class GunCategoryService
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        IAsyncEnumerable<GunCategory> categories = _repository.FetchAll();
+        IAsyncEnumerable<GunCategory> categories = _repository.FetchAllAsync();
 
         return await categories
                         .AnyAsync(x => x.Name.Equals(name));

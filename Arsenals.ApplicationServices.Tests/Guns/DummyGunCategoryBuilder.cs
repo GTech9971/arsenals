@@ -6,10 +6,15 @@ public class DummyGunCategoryBuilder
 {
     public GunCategory Build()
     {
-        return new GunCategory(new GunCategoryId(100), new GunCategoryName("ハンドガン"));
+        return new GunCategory(new GunCategoryId("C-1000"), new GunCategoryName("ハンドガン"));
     }
 
-    public GunCategory Build(int categoryIdVal)
+    public GunCategory BuildWithName(string categoryName)
+    {
+        return new GunCategory(new GunCategoryId("C-1000"), new GunCategoryName(categoryName));
+    }
+
+    public GunCategory Build(string categoryIdVal)
     {
         return new GunCategory(new GunCategoryId(categoryIdVal), new GunCategoryName("ライフル"));
     }

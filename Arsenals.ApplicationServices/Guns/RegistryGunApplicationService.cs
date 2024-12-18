@@ -1,10 +1,10 @@
-using System.Text.Json.Serialization;
 using System.Transactions;
 using Arsenals.Domains.Bullets;
 using Arsenals.Domains.Bullets.Exceptions;
 using Arsenals.Domains.Guns;
 using Arsenals.Domains.Guns.Exceptions;
 using Arsenals.Domains.Guns.Services;
+using Arsenals.Models;
 
 namespace Arsenals.ApplicationServices.Guns;
 
@@ -46,7 +46,7 @@ public class RegistryGunApplicationService
     /// <exception cref="DuplicateGunNameException"></exception>
     /// <exception cref="GunCategoryNotFoundException"></exception>
     /// <exception cref="BulletNotFoundException"></exception>
-    public async Task<RegistryGunResponseDto> ExecuteAsync(RegistryGunRequestDto request)
+    public async Task<RegistryGunResponseModel> ExecuteAsync(RegistryGunRequestModel request)
     {
         ArgumentNullException.ThrowIfNull(request, nameof(request));
 
@@ -55,17 +55,11 @@ public class RegistryGunApplicationService
         Capacity capacity = new Capacity(request.Capacity);
 
         //銃の名前が被っていたら例外
-        if (await _gunService.ExistsAsync(gunName))
-        {
-            throw new DuplicateGunNameException(gunName);
-        }
+        if (await _gunService.ExistsAsync(gunName)) { throw new DuplicateGunNameException(gunName); }
 
         GunCategory? gunCategory = await _gunCategoryRepository.FetchAsync(gunCategoryId);
         //カテゴリーが存在しなければ例外
-        if (gunCategory == null)
-        {
-            throw new GunCategoryNotFoundException(gunCategoryId);
-        }
+        if (gunCategory == null) { throw new GunCategoryNotFoundException(gunCategoryId); }
 
         GunId gunId = await _gunIdFactory.BuildAsync();
 
@@ -74,18 +68,15 @@ public class RegistryGunApplicationService
         //弾丸がリクエストに存在する場合、登録する
         if (request.UseBullets.Any())
         {
-            List<Bullet> bullets = [];
+            ICollection<Bullet> bullets = [];
             IEnumerable<BulletId> bulletIdList = request.UseBullets
                                                             .Distinct()
                                                             .Select(x => new BulletId(x));
             foreach (BulletId bulletId in bulletIdList)
             {
-                Bullet? bullet = await _bulletRepository.FetchAsync(bulletId);
+                Domains.Bullets.Bullet? bullet = await _bulletRepository.FetchAsync(bulletId);
                 //弾丸が存在しなければ例外
-                if (bullet == null)
-                {
-                    throw new BulletNotFoundException(bulletId);
-                }
+                if (bullet == null) { throw new BulletNotFoundException(bulletId); }
                 bullets.Add(bullet);
             }
 
@@ -99,39 +90,14 @@ public class RegistryGunApplicationService
             await _repository.SaveAsync(gun);
             transaction.Complete();
 
-            return new RegistryGunResponseDto(gunId.Value);
+            return new RegistryGunResponseModel()
+            {
+                Data = new RegistryGunResponseAllOfDataModel()
+                {
+                    Id = gunId.Value
+                }
+            };
         }
     }
 }
 
-public class RegistryGunRequestDto
-{
-    [JsonRequired]
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = null!;
-
-    [JsonRequired]
-    [JsonPropertyName("categoryId")]
-    public int CategoryId { get; set; }
-
-    [JsonRequired]
-    [JsonPropertyName("capacity")]
-    public int Capacity { get; set; }
-
-    [JsonPropertyName("useBullets")]
-    public IEnumerable<int> UseBullets { get; set; } = Enumerable.Empty<int>();
-}
-
-public class RegistryGunResponseDto
-{
-
-    public RegistryGunResponseDto() { }
-
-    public RegistryGunResponseDto(int id)
-    {
-        Id = id;
-    }
-
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
-}

@@ -36,7 +36,7 @@ public class FetchGunApplicationServiceTest
 
         await Assert.ThrowsAsync<GunNotFoundException>(async () =>
         {
-            await sut.ExecuteAsync(100);
+            await sut.ExecuteAsync("G-1000");
         });
     }
 
@@ -44,13 +44,13 @@ public class FetchGunApplicationServiceTest
     public async void fetch()
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
-        gunRepositoryMock.Setup(x => x.FetchAsync(new GunId(100))).ReturnsAsync(_dummyGunBuilder.Build());
+        gunRepositoryMock.Setup(x => x.FetchAsync(new GunId("G-1000"))).ReturnsAsync(_dummyGunBuilder.Build());
 
         FetchGunApplicationService sut = new FetchGunApplicationService(gunRepositoryMock.Object,
                                                                         _mapper);
 
 
-        GunDto result = await sut.ExecuteAsync(100);
+        GunDto result = await sut.ExecuteAsync("G-1000");
 
         Assert.Equal(100, result.Id);
 

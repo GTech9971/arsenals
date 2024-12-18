@@ -1,50 +1,26 @@
+using System.Text.RegularExpressions;
+
 namespace Arsenals.Domains.Bullets;
 
 /// <summary>
 /// 弾丸ID
 /// </summary>
-public class BulletId : IEquatable<BulletId>
+public record BulletId
 {
-    /// <summary>
-    /// 最初のIDを生成する
-    /// </summary>
-    /// <returns></returns>
-    public static BulletId FirstId()
-    {
-        return new BulletId(MIN);
-    }
-
+    private const string PATTERN = @"^B-\d{4}$";
     private static readonly int MIN = 100;
 
-    private readonly int _value;
+    public string Value { get; init; }
 
-    public BulletId(int value)
+    public BulletId(string value)
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(value, MIN, nameof(value));
-        _value = value;
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(value, nameof(value));
+        if (Regex.IsMatch(value, PATTERN) == false) { throw new FormatException("弾丸IDの形式が不正です。"); }
+        Value = value;
     }
-    /// <summary>
-    /// 弾丸ID
-    /// </summary>
-    public int Value => _value;
 
     /// <summary>
-    /// 次のIDを生成する
+    /// IDのインデックス
     /// </summary>
-    /// <returns></returns>
-    public BulletId Next()
-    {
-        return new BulletId(_value + MIN);
-    }
-
-    public bool Equals(BulletId? other)
-    {
-        if (other == null) { return false; }
-        if (object.ReferenceEquals(this, other)) { return true; }
-        return _value == other._value;
-    }
-
-    public override bool Equals(object? obj) { return Equals(obj as BulletId); }
-    public override int GetHashCode() { return _value.GetHashCode(); }
-    public override string ToString() { return _value.ToString(); }
+    public int Index => Convert.ToInt32(Value.Replace("B-", ""));
 }

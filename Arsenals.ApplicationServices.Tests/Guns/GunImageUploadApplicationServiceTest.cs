@@ -43,7 +43,7 @@ public class GunImageUploadApplicationServiceTest
 
             using (MemoryStream data = new MemoryStream(binary))
             {
-                GunId gunId = new GunId(100);
+                GunId gunId = new GunId("G-1000");
                 Uri image = await sut.ExecuteAsync(gunId.Value, data);
                 Assert.Equal("/Users/george/Downloads/100", image.AbsolutePath);
             }

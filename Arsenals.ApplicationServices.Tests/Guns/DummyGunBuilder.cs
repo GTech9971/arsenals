@@ -15,6 +15,6 @@ public class DummyGunBuilder
 
     public Gun Build()
     {
-        return new Gun(new GunId(100), new GunName("Glock22"), _dummyGunCategoryBuilder.Build(), new Capacity(17));
+        return new Gun(new GunId("G-1000"), new GunName("Glock22"), _dummyGunCategoryBuilder.Build(), new Capacity(17));
     }
 }

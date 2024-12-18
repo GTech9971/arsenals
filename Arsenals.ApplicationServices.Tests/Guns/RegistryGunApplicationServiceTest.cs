@@ -4,6 +4,7 @@ using Arsenals.Domains.Bullets.Exceptions;
 using Arsenals.Domains.Guns;
 using Arsenals.Domains.Guns.Exceptions;
 using Arsenals.Domains.Guns.Services;
+using Arsenals.Models;
 using Moq;
 
 namespace Arsenals.ApplicationServices.Tests.Guns;
@@ -23,15 +24,21 @@ public class RegistryGunApplicationServiceTest
     public async void registry()
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
-        gunRepositoryMock.Setup(x => x.FetchAll()).Returns(AsyncEnumerable.Empty<Gun>());
+        gunRepositoryMock
+            .Setup(x => x.FetchAllAsync())
+            .Returns(AsyncEnumerable.Empty<Domains.Guns.Gun>());
 
         GunService gunService = new GunService(gunRepositoryMock.Object);
 
         Mock<IGunIdFactory> gunIdFactoryMock = new Mock<IGunIdFactory>();
-        gunIdFactoryMock.Setup(x => x.BuildAsync()).ReturnsAsync(new GunId(200));
+        gunIdFactoryMock
+            .Setup(x => x.BuildAsync())
+            .ReturnsAsync(new GunId("G-2000"));
 
         Mock<IGunCategoryRepository> gunCategoryRepositoryMock = new Mock<IGunCategoryRepository>();
-        gunCategoryRepositoryMock.Setup(x => x.FetchAsync(It.IsAny<GunCategoryId>())).ReturnsAsync(_dummyGunCategoryBuilder.Build());
+        gunCategoryRepositoryMock
+            .Setup(x => x.FetchAsync(It.IsAny<GunCategoryId>()))
+            .ReturnsAsync(_dummyGunCategoryBuilder.Build());
 
         Mock<IBulletRepository> bulletRepositoryMock = new Mock<IBulletRepository>();
 
@@ -41,31 +48,37 @@ public class RegistryGunApplicationServiceTest
                                                                                 gunCategoryRepositoryMock.Object,
                                                                                 bulletRepositoryMock.Object);
 
-        RegistryGunRequestDto request = new RegistryGunRequestDto()
+        RegistryGunRequestModel request = new RegistryGunRequestModel()
         {
             Name = "M567",
-            CategoryId = 100,
+            CategoryId = "C-1000",
             Capacity = 6
         };
 
-        RegistryGunResponseDto newId = await sut.ExecuteAsync(request);
-
-        Assert.Equal(200, newId.Id);
+        RegistryGunResponseModel newId = await sut.ExecuteAsync(request);
+        Assert.NotNull(newId.Data);
+        Assert.Equal("G-2000", newId.Data.Id);
     }
 
     [Fact]
     public async void exists_gun_name()
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
-        gunRepositoryMock.Setup(x => x.FetchAll()).Returns(new List<Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
+        gunRepositoryMock
+            .Setup(x => x.FetchAllAsync())
+            .Returns(new List<Domains.Guns.Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
 
         GunService gunService = new GunService(gunRepositoryMock.Object);
 
         Mock<IGunIdFactory> gunIdFactoryMock = new Mock<IGunIdFactory>();
-        gunIdFactoryMock.Setup(x => x.BuildAsync()).ReturnsAsync(new GunId(200));
+        gunIdFactoryMock
+            .Setup(x => x.BuildAsync())
+            .ReturnsAsync(new GunId("G-2000"));
 
         Mock<IGunCategoryRepository> gunCategoryRepositoryMock = new Mock<IGunCategoryRepository>();
-        gunCategoryRepositoryMock.Setup(x => x.FetchAsync(It.IsAny<GunCategoryId>())).ReturnsAsync(_dummyGunCategoryBuilder.Build());
+        gunCategoryRepositoryMock
+            .Setup(x => x.FetchAsync(It.IsAny<GunCategoryId>()))
+            .ReturnsAsync(_dummyGunCategoryBuilder.Build());
 
         Mock<IBulletRepository> bulletRepositoryMock = new Mock<IBulletRepository>();
 
@@ -75,10 +88,10 @@ public class RegistryGunApplicationServiceTest
                                                                                 gunCategoryRepositoryMock.Object,
                                                                                 bulletRepositoryMock.Object);
 
-        RegistryGunRequestDto request = new RegistryGunRequestDto()
+        RegistryGunRequestModel request = new RegistryGunRequestModel()
         {
             Name = "Glock22",
-            CategoryId = 100,
+            CategoryId = "C-1000",
             Capacity = 6
         };
 
@@ -92,15 +105,21 @@ public class RegistryGunApplicationServiceTest
     public async void not_found_gun_category()
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
-        gunRepositoryMock.Setup(x => x.FetchAll()).Returns(new List<Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
+        gunRepositoryMock
+            .Setup(x => x.FetchAllAsync())
+            .Returns(new List<Domains.Guns.Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
 
         GunService gunService = new GunService(gunRepositoryMock.Object);
 
         Mock<IGunIdFactory> gunIdFactoryMock = new Mock<IGunIdFactory>();
-        gunIdFactoryMock.Setup(x => x.BuildAsync()).ReturnsAsync(new GunId(200));
+        gunIdFactoryMock
+            .Setup(x => x.BuildAsync())
+            .ReturnsAsync(new GunId("G-2000"));
 
         Mock<IGunCategoryRepository> gunCategoryRepositoryMock = new Mock<IGunCategoryRepository>();
-        gunCategoryRepositoryMock.Setup(x => x.FetchAsync(new GunCategoryId(100))).ReturnsAsync(_dummyGunCategoryBuilder.Build());
+        gunCategoryRepositoryMock
+            .Setup(x => x.FetchAsync(new GunCategoryId("C-1000")))
+            .ReturnsAsync(_dummyGunCategoryBuilder.Build());
 
         Mock<IBulletRepository> bulletRepositoryMock = new Mock<IBulletRepository>();
 
@@ -110,10 +129,10 @@ public class RegistryGunApplicationServiceTest
                                                                                 gunCategoryRepositoryMock.Object,
                                                                                 bulletRepositoryMock.Object);
 
-        RegistryGunRequestDto request = new RegistryGunRequestDto()
+        RegistryGunRequestModel request = new RegistryGunRequestModel()
         {
             Name = "M586",
-            CategoryId = 999,
+            CategoryId = "C-9999",
             Capacity = 6
         };
 
@@ -127,18 +146,26 @@ public class RegistryGunApplicationServiceTest
     public async void not_found_bullet()
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
-        gunRepositoryMock.Setup(x => x.FetchAll()).Returns(new List<Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
+        gunRepositoryMock
+            .Setup(x => x.FetchAllAsync())
+            .Returns(new List<Domains.Guns.Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
 
         GunService gunService = new GunService(gunRepositoryMock.Object);
 
         Mock<IGunIdFactory> gunIdFactoryMock = new Mock<IGunIdFactory>();
-        gunIdFactoryMock.Setup(x => x.BuildAsync()).ReturnsAsync(new GunId(200));
+        gunIdFactoryMock
+            .Setup(x => x.BuildAsync())
+            .ReturnsAsync(new GunId("G-2000"));
 
         Mock<IGunCategoryRepository> gunCategoryRepositoryMock = new Mock<IGunCategoryRepository>();
-        gunCategoryRepositoryMock.Setup(x => x.FetchAsync(It.IsAny<GunCategoryId>())).ReturnsAsync(_dummyGunCategoryBuilder.Build());
+        gunCategoryRepositoryMock
+            .Setup(x => x.FetchAsync(It.IsAny<GunCategoryId>()))
+            .ReturnsAsync(_dummyGunCategoryBuilder.Build());
 
         Mock<IBulletRepository> bulletRepositoryMock = new Mock<IBulletRepository>();
-        bulletRepositoryMock.Setup(x => x.FetchAsync(It.IsAny<BulletId>())).ReturnsAsync(() =>
+        bulletRepositoryMock
+            .Setup(x => x.FetchAsync(It.IsAny<BulletId>()))
+            .ReturnsAsync(() =>
         {
             return null;
         });
@@ -149,12 +176,12 @@ public class RegistryGunApplicationServiceTest
                                                                                 gunCategoryRepositoryMock.Object,
                                                                                 bulletRepositoryMock.Object);
 
-        RegistryGunRequestDto request = new RegistryGunRequestDto()
+        RegistryGunRequestModel request = new RegistryGunRequestModel()
         {
             Name = "M586",
-            CategoryId = 100,
+            CategoryId = "C-1000",
             Capacity = 6,
-            UseBullets = [100]
+            UseBullets = ["B-1000"]
         };
 
         await Assert.ThrowsAsync<BulletNotFoundException>(async () =>
