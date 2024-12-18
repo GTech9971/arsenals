@@ -2,6 +2,7 @@ using Arsenals.ApplicationServices.Guns;
 using Arsenals.ApplicationServices.Guns.Dto;
 using Arsenals.Domains.Exceptions;
 using Arsenals.Domains.Guns.Exceptions;
+using Arsenals.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Arsenals.WebApi.Controllers;
@@ -50,7 +51,7 @@ public class GunController : ControllerBase
     /// <param name="category"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<GunDto>>>> FetchAllAsync([FromQuery] int? category)
+    public async Task<ActionResult<BaseResponse<IEnumerable<GunDto>>>> FetchAllAsync([FromQuery] string? category)
     {
         IAsyncEnumerable<GunDto> results = _fetchAllGunApplicationService.Execute(category);
 
@@ -68,15 +69,10 @@ public class GunController : ControllerBase
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost]
-    public async Task<ActionResult<BaseResponse<RegistryGunResponseDto>>> RegistryAsync([FromBody] RegistryGunRequestDto request)
+    public async Task<ActionResult<RegistryGunResponseModel>> RegistryAsync([FromBody] RegistryGunRequestModel request)
     {
-        if (request == null)
-        {
-            return BadRequest();
-        }
-
-        RegistryGunResponseDto responseDto = await _registryGunApplicationService.ExecuteAsync(request);
-        return this.Created(BaseResponse<RegistryGunResponseDto>.CreateSuccess(responseDto));
+        RegistryGunResponseModel responseDto = await _registryGunApplicationService.ExecuteAsync(request);
+        return this.Created(responseDto);
     }
 
     /// <summary>
@@ -85,7 +81,7 @@ public class GunController : ControllerBase
     /// <param name="gunId"></param>
     /// <returns></returns>
     [HttpGet("{gunId}")]
-    public async Task<ActionResult<BaseResponse<GunDto>>> FetchAsync(int gunId)
+    public async Task<ActionResult<BaseResponse<GunDto>>> FetchAsync(string gunId)
     {
         try
         {
@@ -108,7 +104,7 @@ public class GunController : ControllerBase
     /// <param name="gunId"></param>
     /// <returns></returns>
     [HttpDelete("{gunId}")]
-    public async Task<ActionResult> DeleteAsync(int gunId)
+    public async Task<ActionResult> DeleteAsync(string gunId)
     {
         try
         {
@@ -133,7 +129,7 @@ public class GunController : ControllerBase
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPatch("{gunId}")]
-    public async Task<ActionResult<BaseResponse<GunDto>>> UpdateAsync(int gunId, [FromQuery] IEnumerable<string> fieldMask, [FromBody] UpdateGunRequestDto request)
+    public async Task<ActionResult<BaseResponse<GunDto>>> UpdateAsync(string gunId, [FromQuery] IEnumerable<string> fieldMask, [FromBody] UpdateGunRequestDto request)
     {
         try
         {
@@ -161,7 +157,7 @@ public class GunController : ControllerBase
     /// <param name="file"></param>
     /// <returns></returns>
     [HttpPost("{gunId}/images")]
-    public async Task<ActionResult<BaseResponse<string>>> UploadGunImageAsync([FromRoute] int gunId, [FromForm] IFormFile data)
+    public async Task<ActionResult<BaseResponse<string>>> UploadGunImageAsync([FromRoute] string gunId, [FromForm] IFormFile data)
     {
         if (data == null || data.Length == 0)
         {

@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
-using Arsenals.ApplicationServices.Guns;
+using Arsenals.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Arsenals.WebApi.Tests;
 
@@ -8,30 +9,35 @@ public class GunCategoryControllerTest : BaseControllerTest
 {
     public GunCategoryControllerTest(PostgreSqlTest fixture) : base(fixture) { }
 
-    [Fact]
-    public async void fetch()
+    [Fact(DisplayName = "データなし")]
+    public async void empty()
     {
         using HttpResponseMessage response = await _client.GetAsync("/api/categories");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
-    [Fact]
+    [Fact(DisplayName = "銃カテゴリー登録")]
     public async void registry_gun_category()
     {
-        RegistryGunCategoryRequestDto request = new RegistryGunCategoryRequestDto()
+        RegistryGunCategoryRequestModel request = new RegistryGunCategoryRequestModel()
         {
             Name = "ライフル"
         };
 
-        await LoginAsync();
-
         using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/categories", request);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-        BaseResponse<RegistryGunCategoryResponseDto>? baseResponse = await response.Content.ReadFromJsonAsync<BaseResponse<RegistryGunCategoryResponseDto>>();
+        RegistryGunCategoryResponseModel? baseResponse = await response.Content.ReadFromJsonAsync<RegistryGunCategoryResponseModel>();
+        Assert.NotNull(baseResponse?.Data);
+        Assert.Null(baseResponse.Error);
+        Assert.Equal("C-0001", baseResponse.Data.Id);
+        Assert.Equal("/categories/C-0001", response.Headers.Location?.ToString());
 
-        Assert.NotNull(baseResponse);
-        Assert.NotNull(baseResponse.Data);
-        Assert.Equal(100, baseResponse.Data.Id);
+        var category = await _context.GunCategories
+                                        .AsNoTracking()
+                                        .SingleAsync();
+
+        Assert.Equal("C-0001", category.Id);
+        Assert.Equal(request.Name, category.Name);
     }
 }
