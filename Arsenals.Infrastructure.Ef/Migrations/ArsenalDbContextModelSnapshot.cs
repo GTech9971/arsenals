@@ -23,66 +23,76 @@ namespace Arsenals.Infrastructure.Ef.Migrations
 
             modelBuilder.Entity("Arsenals.Infrastructure.Ef.Bullets.BulletData", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id")
+                        .HasComment("主キー");
 
                     b.Property<int>("Damage")
                         .HasColumnType("integer")
-                        .HasColumnName("damage");
+                        .HasColumnName("damage")
+                        .HasComment("ダメージ");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("name");
+                        .HasColumnName("name")
+                        .HasComment("弾丸名");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("bullets");
+                    b.ToTable("bullets", "arsenals");
                 });
 
             modelBuilder.Entity("Arsenals.Infrastructure.Ef.Guns.GunCategoryData", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id")
+                        .HasComment("主キー");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
-                        .HasColumnName("name");
+                        .HasColumnName("name")
+                        .HasComment("カテゴリー名");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("gun_categories");
+                    b.ToTable("gun_categories", "arsenals");
                 });
 
             modelBuilder.Entity("Arsenals.Infrastructure.Ef.Guns.GunData", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id")
+                        .HasComment("主キー");
 
                     b.Property<int>("Capacity")
                         .HasColumnType("integer")
-                        .HasColumnName("capacity");
+                        .HasColumnName("capacity")
+                        .HasComment("装弾数");
 
-                    b.Property<int>("GunCategoryDataId")
-                        .HasColumnType("integer")
-                        .HasColumnName("gun_category_id");
+                    b.Property<string>("GunCategoryDataId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("gun_category_id")
+                        .HasComment("銃のカテゴリー外部キー");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnName("name")
+                        .HasComment("銃の名称");
 
                     b.HasKey("Id");
 
@@ -91,22 +101,22 @@ namespace Arsenals.Infrastructure.Ef.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("guns");
+                    b.ToTable("guns", "arsenals");
                 });
 
             modelBuilder.Entity("BulletDataGunData", b =>
                 {
-                    b.Property<int>("BulletDataListId")
-                        .HasColumnType("integer");
+                    b.Property<string>("BulletDataListId")
+                        .HasColumnType("text");
 
-                    b.Property<int>("GunDataListId")
-                        .HasColumnType("integer");
+                    b.Property<string>("GunDataListId")
+                        .HasColumnType("text");
 
                     b.HasKey("BulletDataListId", "GunDataListId");
 
                     b.HasIndex("GunDataListId");
 
-                    b.ToTable("BulletDataGunData");
+                    b.ToTable("BulletDataGunData", "arsenals");
                 });
 
             modelBuilder.Entity("Arsenals.Infrastructure.Ef.Guns.GunData", b =>

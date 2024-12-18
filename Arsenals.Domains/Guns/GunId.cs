@@ -29,6 +29,11 @@ public record GunId
         Value = value;
     }
 
+    public GunId Next()
+    {
+        return new GunId($"G-{(Index + 1).ToString().PadLeft(4, '0')}");
+    }
+
 
     /// <summary>
     /// 銃の画像のURLを取得する

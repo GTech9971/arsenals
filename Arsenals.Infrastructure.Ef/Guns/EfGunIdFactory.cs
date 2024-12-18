@@ -22,7 +22,7 @@ public class EfGunIdFactory : IGunIdFactory
 
         if (gunData == null)
         {
-            return GunId.FirstId();
+            return new GunId("G-0001");
         }
         else
         {

@@ -27,7 +27,7 @@ public class EfGunRepository : IGunRepository
         _context.Guns.Remove(gunData);
     }
 
-    public IAsyncEnumerable<Gun> FetchAll()
+    public IAsyncEnumerable<Gun> FetchAllAsync()
     {
         return _context.Guns
                         .AsNoTracking()
@@ -66,7 +66,7 @@ public class EfGunRepository : IGunRepository
             //既存データからのリレーションと認識させるため、以下の代入を行う
             if (gun.UseableBullets.Any())
             {
-                IEnumerable<int> gunIdList = gun.UseableBullets
+                IEnumerable<string> gunIdList = gun.UseableBullets
                                                     .Select(x => x.Id.Value);
 
                 //再割り当てをさせないためにAsNoTrackingを記載してはいけない

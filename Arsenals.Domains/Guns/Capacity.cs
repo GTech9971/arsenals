@@ -5,8 +5,8 @@ namespace Arsenals.Domains.Guns;
 /// </summary>
 public record Capacity
 {
-    private static readonly int MIN = 1;
-    private static readonly int MAX = 5000;
+    public const int MIN = 1;
+    public const int MAX = 5000;
 
     public int Value { get; init; }
 

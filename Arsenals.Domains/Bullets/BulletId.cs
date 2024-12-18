@@ -19,6 +19,11 @@ public record BulletId
         Value = value;
     }
 
+    public BulletId Next()
+    {
+        return new BulletId($"B-{(Index + 1).ToString().PadLeft(4, '0')}");
+    }
+
     /// <summary>
     /// IDのインデックス
     /// </summary>

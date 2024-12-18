@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Arsenals.Infrastructure.Ef.Guns;
 
-[Table("gun_categories")]
+[Table("gun_categories", Schema = DbConst.SchemaName)]
 [DisplayName("銃のカテゴリー")]
 [Index(nameof(Name), IsUnique = true)]
 public class GunCategoryData
@@ -14,11 +14,13 @@ public class GunCategoryData
     [Column("id")]
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     [DisplayName("主キー")]
-    public int Id { get; set; }
+    [Comment("主キー")]
+    public string Id { get; set; } = null!;
 
     [Required]
     [Column("name")]
     [MaxLength(50)]
     [DisplayName("カテゴリー名")]
+    [Comment("カテゴリー名")]
     public string Name { get; set; } = null!;
 }

@@ -1,5 +1,6 @@
 using Arsenals.Domains.Guns;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Arsenals.Infrastructure.Ef.Guns;
@@ -30,7 +31,7 @@ public class EfGunCategoryRepository : IGunCategoryRepository
         await _context.SaveChangesAsync();
     }
 
-    public IAsyncEnumerable<GunCategory> FetchAll()
+    public IAsyncEnumerable<GunCategory> FetchAllAsync()
     {
         return _context.GunCategories
                         .AsNoTracking()

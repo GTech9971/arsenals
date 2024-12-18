@@ -23,4 +23,9 @@ public record class GunCategoryId
         Value = value;
     }
 
+    public GunCategoryId Next()
+    {
+        return new GunCategoryId($"C-{(Index + 1).ToString().PadLeft(4, '0')}");
+    }
+
 }

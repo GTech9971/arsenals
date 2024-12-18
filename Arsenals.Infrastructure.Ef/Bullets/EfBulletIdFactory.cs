@@ -22,7 +22,7 @@ public class EfBulletIdFactory : IBulletIdFactory
 
         if (bulletData == null)
         {
-            return BulletId.FirstId();
+            return new BulletId("B-0001");
         }
         else
         {
