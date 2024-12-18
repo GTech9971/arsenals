@@ -1,34 +1,34 @@
+using System.Text.RegularExpressions;
+
 namespace Arsenals.Domains.Guns;
 
 /// <summary>
 /// 銃ID
 /// </summary>
-public class GunId : IEquatable<GunId>
+/// <example>G-1201</example>
+public record GunId
 {
+    private const string PATTERN = @"^G-\d{4}$";
+
+    public string Value { get; init; }
 
     /// <summary>
-    /// 最初のIDを生成する
+    /// IDのインデックス
     /// </summary>
-    /// <returns></returns>
-    public static GunId FirstId()
-    {
-        return new GunId(MIN);
-    }
-
-    private static readonly int MIN = 100;
-
-    private readonly int _value;
-
-    public GunId(int value)
-    {
-        ArgumentOutOfRangeException.ThrowIfLessThan(value, MIN, nameof(value));
-        _value = value;
-    }
+    public int Index => Convert.ToInt32(Value.Replace("G-", ""));
 
     /// <summary>
-    /// 銃ID
+    /// 
     /// </summary>
-    public int Value => _value;
+    /// <param name="value"></param>
+    /// <exception cref="FormatException"></exception>
+    public GunId(string value)
+    {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(value, nameof(value));
+        if (Regex.IsMatch(value, PATTERN) == false) { throw new FormatException("銃IDの形式が不正です。"); }
+        Value = value;
+    }
+
 
     /// <summary>
     /// 銃の画像のURLを取得する
@@ -38,7 +38,7 @@ public class GunId : IEquatable<GunId>
     public Uri ImageUrl(string root)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(root, nameof(root));
-        return new Uri(Path.Combine(root, _value.ToString()));
+        return new Uri(Path.Combine(root, Value.ToString()));
     }
 
     /// <summary>
@@ -49,35 +49,6 @@ public class GunId : IEquatable<GunId>
     public string ImagePath(string root)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(root, nameof(root));
-        return Path.Combine(root, _value.ToString());
+        return Path.Combine(root, Value.ToString());
     }
-
-    /// <summary>
-    /// 次のIDを生成する
-    /// </summary>
-    /// <returns></returns>
-    public GunId Next()
-    {
-        return new GunId(_value + MIN);
-    }
-
-    public bool Equals(GunId? other)
-    {
-        if (object.ReferenceEquals(null, other)) { return false; }
-        if (object.ReferenceEquals(this, other)) { return true; }
-        return _value == other.Value;
-    }
-
-    public override bool Equals(object? obj) { return Equals(obj as GunId); }
-    public override int GetHashCode() { return _value.GetHashCode(); }
-
-    public static bool operator ==(GunId left, GunId right)
-    {
-        if (object.ReferenceEquals(left, right)) { return true; }
-        return left.Equals(right);
-    }
-
-    public static bool operator !=(GunId left, GunId right) => !(left == right);
-
-    public override string ToString() { return _value.ToString(); }
 }

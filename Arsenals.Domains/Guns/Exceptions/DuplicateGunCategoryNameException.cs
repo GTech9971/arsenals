@@ -5,7 +5,6 @@ namespace Arsenals.Domains.Guns.Exceptions;
 /// <summary>
 /// 銃のカテゴリー名が重複した例外
 /// </summary>
-[Serializable]
 public class DuplicateGunCategoryNameException : DuplicateException
 {
     public DuplicateGunCategoryNameException() : base() { }

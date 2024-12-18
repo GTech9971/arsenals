@@ -3,7 +3,6 @@ namespace Arsenals.Domains.Exceptions;
 /// <summary>
 /// 存在しない例外
 /// </summary>
-[Serializable]
 public class NotFoundException : Exception
 {
     public NotFoundException() : base() { }

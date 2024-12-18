@@ -22,7 +22,7 @@ public class GunService
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        IAsyncEnumerable<Gun> guns = _repository.FetchAll();
+        IAsyncEnumerable<Gun> guns = _repository.FetchAllAsync();
         return await guns
                         .AnyAsync(x => x.Name.Equals(name));
     }

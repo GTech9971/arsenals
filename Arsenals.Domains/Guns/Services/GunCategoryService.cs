@@ -39,7 +39,7 @@ public class GunCategoryService
     /// <returns></returns>
     public async Task<bool> CanDeleteAsync(GunCategoryId gunCategoryId)
     {
-        IAsyncEnumerable<Gun> guns = _gunRepository.FetchAll();
+        IAsyncEnumerable<Gun> guns = _gunRepository.FetchAllAsync();
         //1件でも銃にカテゴリーが紐づいている場合不可
         return await guns
                         .AnyAsync(x => x.Category.Id.Equals(gunCategoryId)) == false;

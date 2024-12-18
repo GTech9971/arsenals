@@ -5,7 +5,6 @@ namespace Arsenals.Domains.Guns.Exceptions;
 /// <summary>
 /// 銃の名称が被っている例外
 /// </summary>
-[Serializable]
 public class DuplicateGunNameException : DuplicateException
 {
     public DuplicateGunNameException(GunName gunName) : base($"銃の名称:{gunName}は既に存在します") { }
