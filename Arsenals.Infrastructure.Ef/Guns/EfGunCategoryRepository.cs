@@ -1,6 +1,5 @@
 using Arsenals.Domains.Guns;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Arsenals.Infrastructure.Ef.Guns;
@@ -23,10 +22,12 @@ public class EfGunCategoryRepository : IGunCategoryRepository
 
     public async Task DeleteAsync(GunCategoryId id)
     {
+        ArgumentNullException.ThrowIfNull(id, nameof(id));
+
         GunCategoryData data = await _context.GunCategories
-                                        .Where(x => x.Id == id.Value)
-                                        .SingleAsync();
-        _context.Remove(data);
+                                                .Where(x => x.Id == id.Value)
+                                                .SingleAsync();
+        _context.GunCategories.Remove(data);
 
         await _context.SaveChangesAsync();
     }
@@ -50,9 +51,11 @@ public class EfGunCategoryRepository : IGunCategoryRepository
 
     public async Task SaveAsync(GunCategory gunCategory)
     {
+        ArgumentNullException.ThrowIfNull(gunCategory, nameof(gunCategory));
+
         GunCategoryData? found = await _context.GunCategories
-                                        .Where(x => x.Id == gunCategory.Id.Value)
-                                        .SingleOrDefaultAsync();
+                                                    .Where(x => x.Id == gunCategory.Id.Value)
+                                                    .SingleOrDefaultAsync();
 
         if (found == null)
         {

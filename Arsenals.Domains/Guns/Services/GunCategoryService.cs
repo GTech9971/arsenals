@@ -34,14 +34,16 @@ public class GunCategoryService
 
     /// <summary>
     /// 銃のカテゴリーを削除可能かどうか確認する
+    /// 1件でも銃にカテゴリーが紐づいている場合, false
     /// </summary>
     /// <param name="gunCategoryId"></param>
     /// <returns></returns>
     public async Task<bool> CanDeleteAsync(GunCategoryId gunCategoryId)
     {
-        IAsyncEnumerable<Gun> guns = _gunRepository.FetchAllAsync();
-        //1件でも銃にカテゴリーが紐づいている場合不可
-        return await guns
-                        .AnyAsync(x => x.Category.Id.Equals(gunCategoryId)) == false;
+        ArgumentNullException.ThrowIfNull(gunCategoryId, nameof(gunCategoryId));
+
+        return await _gunRepository.FetchAllAsync()
+                                    .AnyAsync(x => x.Category.Id.Equals(gunCategoryId)) == false;
+
     }
 }

@@ -32,6 +32,8 @@ public class DeleteGunCategoryApplicationService
     /// <exception cref="InvalidOperationException"></exception>
     public async Task ExecuteAsync(string categoryId)
     {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(categoryId, nameof(categoryId));
+
         GunCategoryId gunCategoryId = new GunCategoryId(categoryId);
 
         GunCategory? found = await _repository.FetchAsync(gunCategoryId);

@@ -3,11 +3,11 @@ using System.Net.Http.Json;
 using Arsenals.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Arsenals.WebApi.Tests;
+namespace Arsenals.WebApi.Tests.Categories;
 
-public class GunCategoryControllerTest : BaseControllerTest
+public class RegistryGunCategoryControllerTest : BaseControllerTest
 {
-    public GunCategoryControllerTest(PostgreSqlTest fixture) : base(fixture) { }
+    public RegistryGunCategoryControllerTest(PostgreSqlTest fixture) : base(fixture) { }
 
     [Fact(DisplayName = "データなし")]
     public async void empty()
