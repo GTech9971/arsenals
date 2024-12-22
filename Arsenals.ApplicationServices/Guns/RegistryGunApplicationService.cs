@@ -66,7 +66,7 @@ public class RegistryGunApplicationService
         Gun.Builder builder = new Gun.Builder(gunId, gunName, gunCategory, capacity);
 
         //弾丸がリクエストに存在する場合、登録する
-        if (request.UseBullets.Any())
+        if (request.UseBullets != null && request.UseBullets.Any())
         {
             ICollection<Bullet> bullets = [];
             IEnumerable<BulletId> bulletIdList = request.UseBullets
@@ -74,7 +74,7 @@ public class RegistryGunApplicationService
                                                             .Select(x => new BulletId(x));
             foreach (BulletId bulletId in bulletIdList)
             {
-                Domains.Bullets.Bullet? bullet = await _bulletRepository.FetchAsync(bulletId);
+                Bullet? bullet = await _bulletRepository.FetchAsync(bulletId);
                 //弾丸が存在しなければ例外
                 if (bullet == null) { throw new BulletNotFoundException(bulletId); }
                 bullets.Add(bullet);

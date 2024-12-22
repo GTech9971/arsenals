@@ -1,3 +1,5 @@
+using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Arsenals.WebApi.Filters;
@@ -21,8 +23,27 @@ public class LoggingFilter : IActionFilter
     public void OnActionExecuted(ActionExecutedContext context)
     {
         var request = context.HttpContext.Request;
-        var response = context.HttpContext.Response;
-        _logger.LogInformation($"[{request.Method}] {request.Scheme}://{request.Host}{request.Path} - {response.StatusCode}");
+        int? statusCode = null;
+        string? errorMessage = null;
+
+        if (context.Result is ObjectResult result)
+        {
+            statusCode = result.StatusCode;
+            errorMessage = ResponseHelper.GetErrorMessage(result.Value);
+        }
+        else if (context.Result is NoContentResult)
+        {
+            statusCode = (int)HttpStatusCode.NoContent;
+        }
+
+        if (statusCode >= 100 && statusCode < 400)
+        {
+            _logger.LogInformation($"[{request.Method}][{statusCode}] {request.Scheme}://{request.Host}{request.Path} - end");
+        }
+        else if (statusCode >= 400 && statusCode < 500)
+        {
+            _logger.LogWarning($"[{request.Method}][{statusCode}] {request.Scheme}://{request.Host}{request.Path} - end {errorMessage}");
+        }
     }
 
 
