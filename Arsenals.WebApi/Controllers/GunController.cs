@@ -71,8 +71,20 @@ public class GunController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<RegistryGunResponseModel>> RegistryAsync([FromBody] RegistryGunRequestModel request)
     {
-        RegistryGunResponseModel responseDto = await _registryGunApplicationService.ExecuteAsync(request);
-        return this.Created(responseDto);
+        try
+        {
+            RegistryGunResponseModel responseDto = await _registryGunApplicationService.ExecuteAsync(request);
+            Response.Headers.Location = $"guns/{responseDto.Data?.Id}";
+            return this.Created(responseDto);
+        }
+        catch (DuplicateGunNameException ex)
+        {
+            return BadRequest(new RegistryGunResponseModel() { Error = new BaseResponseErrorModel() { Message = ex.Message } });
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new RegistryGunResponseModel() { Error = new BaseResponseErrorModel() { Message = ex.Message } });
+        }
     }
 
     /// <summary>

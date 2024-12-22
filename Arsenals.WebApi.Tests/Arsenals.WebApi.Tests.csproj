@@ -36,8 +36,4 @@
     <ProjectReference Include="..\Arsenals.WebApi\Arsenals.WebApi.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Guns/" />
-  </ItemGroup>
-
 </Project>

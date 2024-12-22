@@ -20,13 +20,13 @@ public class RegistryGunApplicationServiceTest
         _dummyGunBuilder = new DummyGunBuilder(_dummyGunCategoryBuilder);
     }
 
-    [Fact]
+    [Fact(DisplayName = "銃登録")]
     public async void registry()
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
         gunRepositoryMock
             .Setup(x => x.FetchAllAsync())
-            .Returns(AsyncEnumerable.Empty<Domains.Guns.Gun>());
+            .Returns(AsyncEnumerable.Empty<Gun>());
 
         GunService gunService = new GunService(gunRepositoryMock.Object);
 
@@ -60,13 +60,13 @@ public class RegistryGunApplicationServiceTest
         Assert.Equal("G-2000", newId.Data.Id);
     }
 
-    [Fact]
+    [Fact(DisplayName = "既に同じ名前の銃が存在する")]
     public async void exists_gun_name()
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
         gunRepositoryMock
             .Setup(x => x.FetchAllAsync())
-            .Returns(new List<Domains.Guns.Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
+            .Returns(new List<Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
 
         GunService gunService = new GunService(gunRepositoryMock.Object);
 
@@ -101,13 +101,13 @@ public class RegistryGunApplicationServiceTest
         });
     }
 
-    [Fact]
+    [Fact(DisplayName = "銃カテゴリーが存在しない")]
     public async void not_found_gun_category()
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
         gunRepositoryMock
             .Setup(x => x.FetchAllAsync())
-            .Returns(new List<Domains.Guns.Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
+            .Returns(new List<Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
 
         GunService gunService = new GunService(gunRepositoryMock.Object);
 
@@ -142,13 +142,13 @@ public class RegistryGunApplicationServiceTest
         });
     }
 
-    [Fact]
+    [Fact(DisplayName = "弾丸が存在しない")]
     public async void not_found_bullet()
     {
         Mock<IGunRepository> gunRepositoryMock = new Mock<IGunRepository>();
         gunRepositoryMock
             .Setup(x => x.FetchAllAsync())
-            .Returns(new List<Domains.Guns.Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
+            .Returns(new List<Gun>() { _dummyGunBuilder.Build() }.ToAsyncEnumerable());
 
         GunService gunService = new GunService(gunRepositoryMock.Object);
 
