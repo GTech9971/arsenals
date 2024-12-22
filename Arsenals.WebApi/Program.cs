@@ -19,6 +19,7 @@ using Arsenals.Infrastructure.FileStorage.Guns;
 using Arsenals.WebApi;
 using Arsenals.WebApi.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -41,6 +42,25 @@ builder.Services.AddDbContext<ArsenalDbContext>((_, options) =>
     options.UseNpgsql(connectionString, x => x.MigrationsAssembly(typeof(Program).Assembly.FullName));
     options.UseLoggerFactory(loggerFactory); // ここでカスタムロガーファクトリを使用
     options.EnableSensitiveDataLogging(); // 重要: SQL の詳細を含めるためのオプション
+});
+
+// Json変換失敗時
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState.Values
+                                            .SelectMany(x => x.Errors)
+                                            .Select(x => x.ErrorMessage);
+        var result = new
+        {
+            Errors = new
+            {
+                Message = string.Join(",", errors)
+            }
+        };
+        return new BadRequestObjectResult(result);
+    };
 });
 
 //AutoMapper
@@ -97,7 +117,10 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<LoggingFilter>();
 }).AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.WriteIndented = true;
+    if (builder.Environment.IsDevelopment())
+    {
+        options.JsonSerializerOptions.WriteIndented = true;
+    }
     options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
 });
 

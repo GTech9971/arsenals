@@ -98,4 +98,34 @@ public class BaseControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
     }
 
     #endregion
+
+    #region 銃
+
+
+    /// <summary>
+    /// 銃登録
+    /// </summary>
+    /// <param name="gunName"></param>
+    /// <param name="categoryId"></param>
+    /// <returns></returns>
+    protected async Task<string> RegistryGunAsync(string gunName, string categoryId)
+    {
+        RegistryGunRequestModel request = new RegistryGunRequestModel()
+        {
+            Name = gunName,
+            Capacity = 9,
+            CategoryId = categoryId,
+            UseBullets = []
+        };
+
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/guns", request);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+        RegistryGunResponseModel? responseModel = await response.Content.ReadFromJsonAsync<RegistryGunResponseModel>();
+        Assert.NotNull(responseModel?.Data);
+
+        return responseModel.Data.Id;
+    }
+
+    #endregion
 }

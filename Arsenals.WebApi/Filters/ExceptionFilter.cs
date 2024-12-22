@@ -17,11 +17,18 @@ public class ExceptionFilter : IExceptionFilter
     public void OnException(ExceptionContext context)
     {
         Exception exception = context.Exception;
+        var request = context.HttpContext.Request;
+
+        string? errorMessage = null;
+        if (context.Result is ObjectResult result)
+        {
+            errorMessage = ResponseHelper.GetErrorMessage(result.Value);
+        }
 
         _logger.LogError(exception, exception.Message);
+        _logger.LogError($"[{request.Method}][500] {request.Scheme}://{request.Host}{request.Path} {errorMessage}");
 
         BaseResponse<object?> response = BaseResponse<object?>.CreateError(exception);
-
 
         string contentJson = JsonSerializer.Serialize(response);
         context.Result = new ContentResult
