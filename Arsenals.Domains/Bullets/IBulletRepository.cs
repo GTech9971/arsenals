@@ -5,7 +5,7 @@ namespace Arsenals.Domains.Bullets;
 /// </summary>
 public interface IBulletRepository
 {
-    IAsyncEnumerable<Bullet> FetchAll();
+    IAsyncEnumerable<Bullet> FetchAllAsync();
 
     Task<Bullet?> FetchAsync(BulletId id);
 

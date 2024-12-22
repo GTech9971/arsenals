@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Arsenals.ApplicationServices.Bullets;
 using Arsenals.ApplicationServices.Guns;
 using Arsenals.ApplicationServices.Guns.Dto;
 using Arsenals.ApplicationServices.Users;
@@ -77,6 +78,8 @@ builder.Services.AddScoped<DeleteGunApplicationService>();
 builder.Services.AddScoped<UpdateGunApplicationService>();
 
 builder.Services.AddScoped<GunImageUploadApplicationService>();
+
+builder.Services.AddScoped<RegistryBulletApplicationService>();
 
 builder.Services.AddScoped<LoginUserApplicationService>();
 

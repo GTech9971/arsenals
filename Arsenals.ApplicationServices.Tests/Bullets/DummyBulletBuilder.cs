@@ -12,4 +12,9 @@ public class DummyBulletBuilder
     {
         return new Bullet(new BulletId(bulletIdVal), new BulletName("45ACP"), new Damage(4));
     }
+
+    public Bullet BuildWithName(string name)
+    {
+        return new Bullet(new BulletId("B-1000"), new BulletName(name), new Damage(4));
+    }
 }

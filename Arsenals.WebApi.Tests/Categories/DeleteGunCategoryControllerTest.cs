@@ -24,7 +24,7 @@ public class DeleteGunCategoryControllerTest : BaseControllerTest
     [Fact(DisplayName = "カテゴリー削除")]
     public async void delete()
     {
-        string categoryId = await RegistryCategory();
+        string categoryId = await RegistryCategoryAsync();
         using HttpResponseMessage response = await _client.DeleteAsync($"/api/categories/{categoryId}");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 

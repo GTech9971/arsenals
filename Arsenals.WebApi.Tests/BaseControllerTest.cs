@@ -57,7 +57,7 @@ public class BaseControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
     /// カテゴリー登録
     /// </summary>
     /// <returns></returns>
-    protected async Task<string> RegistryCategory()
+    protected async Task<string> RegistryCategoryAsync()
     {
         RegistryGunCategoryRequestModel request = new RegistryGunCategoryRequestModel() { Name = "ライフル" };
 
@@ -68,6 +68,33 @@ public class BaseControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
         Assert.NotNull(baseResponse?.Data);
 
         return baseResponse.Data.Id;
+    }
+
+    #endregion
+
+    #region 弾丸
+
+    /// <summary>
+    /// 弾丸登録
+    /// </summary>
+    /// <param name="bulletName"></param>
+    /// <returns></returns>
+    protected async Task<string> RegistryBulletAsync(string bulletName = "9mm")
+    {
+        RegistryBulletRequestModel request = new RegistryBulletRequestModel()
+        {
+            Name = bulletName,
+            Damage = 3
+        };
+
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/bullets", request);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+        RegistryBulletResponseModel? responseModel = await response.Content.ReadFromJsonAsync<RegistryBulletResponseModel>();
+        Assert.NotNull(responseModel?.Data);
+        Assert.Equal($"bullets/{responseModel.Data.Id}", response.Headers.Location?.ToString());
+
+        return responseModel.Data.Id;
     }
 
     #endregion

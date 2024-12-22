@@ -28,9 +28,9 @@ public class BulletService
     {
         ArgumentNullException.ThrowIfNull(name, nameof(name));
 
-        IAsyncEnumerable<Bullet> bullets = _repository.FetchAll();
+        IAsyncEnumerable<Bullet> bullets = _repository.FetchAllAsync();
         return await bullets
-                        .AnyAsync(x => x.Name.Equals(name)) == false;
+                        .AnyAsync(x => x.Name.Equals(name));
     }
 
     /// <summary>

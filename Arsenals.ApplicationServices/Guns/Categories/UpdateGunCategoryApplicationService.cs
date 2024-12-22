@@ -1,8 +1,8 @@
-using System.Text.Json.Serialization;
 using System.Transactions;
 using Arsenals.Domains.Guns;
 using Arsenals.Domains.Guns.Exceptions;
 using Arsenals.Domains.Guns.Services;
+using Arsenals.Models;
 
 namespace Arsenals.ApplicationServices.Guns;
 
@@ -33,8 +33,9 @@ public class UpdateGunCategoryApplicationService
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="GunCategoryNotFoundException"></exception>
-    public async Task ExecuteAsync(string categoryId, IEnumerable<string> fieldMasks, UpdateGunCategoryRequestDto request)
+    public async Task ExecuteAsync(string categoryId, IEnumerable<string> fieldMasks, UpdateGunCategoryRequestModel request)
     {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(categoryId, nameof(categoryId));
         ArgumentNullException.ThrowIfNull(fieldMasks, nameof(fieldMasks));
         ArgumentNullException.ThrowIfNull(request, nameof(request));
         if (fieldMasks.Contains("name") == false) { throw new ArgumentException("フィールドマスクに有効な値が存在しません。", nameof(fieldMasks)); }
@@ -59,11 +60,4 @@ public class UpdateGunCategoryApplicationService
         }
     }
 
-}
-
-public class UpdateGunCategoryRequestDto
-{
-    [JsonRequired]
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = null!;
 }

@@ -147,7 +147,7 @@ public class UpdateGunApplicationServiceTest
 
         Mock<IBulletRepository> bulletRepositoryMock = new Mock<IBulletRepository>();
         bulletRepositoryMock
-            .Setup(x => x.FetchAll())
+            .Setup(x => x.FetchAllAsync())
             .Returns(() =>
         {
             return new List<Bullet>() { _dummyBulletBuilder.Build(), _dummyBulletBuilder.Build("B-2000") }.ToAsyncEnumerable();

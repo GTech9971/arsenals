@@ -30,7 +30,7 @@ public class EfBulletRepository : IBulletRepository
         await _context.SaveChangesAsync();
     }
 
-    public IAsyncEnumerable<Bullet> FetchAll()
+    public IAsyncEnumerable<Bullet> FetchAllAsync()
     {
         return _context.Bullets
                         .AsNoTracking()
