@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.Desktop", "Arsenal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.Domains.Tests", "Arsenals.Domains.Tests\Arsenals.Domains.Tests.csproj", "{3A146B7E-84F2-4A76-B086-DA7CC986053C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.Infrastructure.Migration.Batch", "Arsenals.Infrastructure.Migration.Batch\Arsenals.Infrastructure.Migration.Batch.csproj", "{7C9149B7-C0F5-4244-B59A-18EC4EF4C1A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arsenals.Infrastructure.Migration.Batch.Tests", "Arsenals.Infrastructure.Migration.Batch.Tests\Arsenals.Infrastructure.Migration.Batch.Tests.csproj", "{2772E7B6-DF55-4D7C-8C94-9A12CBADBEEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,14 @@ Global
 		{3A146B7E-84F2-4A76-B086-DA7CC986053C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A146B7E-84F2-4A76-B086-DA7CC986053C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A146B7E-84F2-4A76-B086-DA7CC986053C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9149B7-C0F5-4244-B59A-18EC4EF4C1A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9149B7-C0F5-4244-B59A-18EC4EF4C1A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9149B7-C0F5-4244-B59A-18EC4EF4C1A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9149B7-C0F5-4244-B59A-18EC4EF4C1A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2772E7B6-DF55-4D7C-8C94-9A12CBADBEEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2772E7B6-DF55-4D7C-8C94-9A12CBADBEEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2772E7B6-DF55-4D7C-8C94-9A12CBADBEEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2772E7B6-DF55-4D7C-8C94-9A12CBADBEEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
