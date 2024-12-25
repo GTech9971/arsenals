@@ -12,7 +12,7 @@ public class RegistryGunCategoryControllerTest : BaseControllerTest
     [Fact(DisplayName = "データなし")]
     public async void empty()
     {
-        using HttpResponseMessage response = await _client.GetAsync("/api/categories");
+        using HttpResponseMessage response = await _client.GetAsync("/api/v1/arsenals/categories");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
@@ -24,7 +24,7 @@ public class RegistryGunCategoryControllerTest : BaseControllerTest
             Name = "ライフル"
         };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/categories", request);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/v1/arsenals/categories", request);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
         RegistryGunCategoryResponseModel? baseResponse = await response.Content.ReadFromJsonAsync<RegistryGunCategoryResponseModel>();

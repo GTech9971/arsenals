@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
@@ -27,6 +28,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Log
 builder.Logging.AddLog4Net();
+
+IHostEnvironment environment = builder.Environment;
+Debug.WriteLine(environment.EnvironmentName);
+Debug.WriteLine(Directory.GetCurrentDirectory());
+
+// DB設定読み込み
+builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("dbsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"dbsettings.{environment.EnvironmentName}.json", optional: true);
 
 //DB
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -171,9 +182,9 @@ public class DummyUserRepository : IUserRepository
 
     public Task<User?> FetchAsync(UserId id)
     {
-        return Task<User?>.Run(() =>
+        return Task<User>.Run(() =>
         {
-            return new User(new UserId("test"), [new UserRole("Admin")]);
+            return (User?)new User(new UserId("test"), [new UserRole("Admin")]);
         });
     }
 }

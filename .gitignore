@@ -403,3 +403,4 @@ FodyWeavers.xsd
 #Test
 TestResults
 TestReport
+*.Production.json

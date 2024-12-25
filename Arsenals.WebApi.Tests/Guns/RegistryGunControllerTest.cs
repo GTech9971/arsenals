@@ -23,7 +23,7 @@ public class RegistryGunControllerTest : BaseControllerTest
             UseBullets = [bulletId]
         };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/guns", request);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/v1/arsenals/guns", request);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
         RegistryGunResponseModel? responseModel = await response.Content.ReadFromJsonAsync<RegistryGunResponseModel>();
@@ -56,7 +56,7 @@ public class RegistryGunControllerTest : BaseControllerTest
             UseBullets = [bulletId]
         };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/guns", request);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/v1/arsenals/guns", request);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
         RegistryGunResponseModel? responseModel = await response.Content.ReadFromJsonAsync<RegistryGunResponseModel>();
@@ -74,7 +74,7 @@ public class RegistryGunControllerTest : BaseControllerTest
             UseBullets = []
         };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/guns", request);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/v1/arsenals/guns", request);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         RegistryGunResponseModel? responseModel = await response.Content.ReadFromJsonAsync<RegistryGunResponseModel>();
@@ -95,7 +95,7 @@ public class RegistryGunControllerTest : BaseControllerTest
             UseBullets = ["B-1000"]
         };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/guns", request);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/v1/arsenals/guns", request);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         RegistryGunResponseModel? responseModel = await response.Content.ReadFromJsonAsync<RegistryGunResponseModel>();

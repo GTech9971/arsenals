@@ -11,11 +11,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
+    <None Update="dbsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
 
-    <None Update="appsettings.Development.json">
+    <None Update="dbsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
+    <None Update="dbsettings.Production.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -29,7 +29,7 @@ public class GunControllerTest : BaseControllerTest
     [Fact]
     public async void fetch_guns_empty()
     {
-        using HttpResponseMessage response = await _client.GetAsync("/api/guns");
+        using HttpResponseMessage response = await _client.GetAsync("/api/v1/arsenals/guns");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
@@ -46,14 +46,14 @@ public class GunControllerTest : BaseControllerTest
             UseBullets = ["B-0001"]
         };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync<RegistryGunRequestModel>("/api/guns", requestDto);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync<RegistryGunRequestModel>("/api/v1/arsenals/guns", requestDto);
 
         RegistryGunResponseModel? baseResponse = await response.Content.ReadFromJsonAsync<RegistryGunResponseModel>();
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         Assert.NotNull(baseResponse);
         Assert.NotNull(baseResponse.Data);
-        Assert.Equal("G-2000", baseResponse.Data.Id);
+        Assert.Equal("G-0002", baseResponse.Data.Id);
     }
 
     [Theory]

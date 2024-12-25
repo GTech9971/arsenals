@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Arsenals.WebApi.Controllers;
 
-[Route("api/users")]
+[Route("api/v1/arsenals/users")]
 [ApiController]
 public class UserController : ControllerBase
 {
