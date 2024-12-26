@@ -20,7 +20,7 @@
                 "--urls",
                 "http://localhost:5000"
             ],
-            "cwd": "${workspaceFolder}/Arsenals.WebApi",
+            "cwd": "${workspaceFolder}/Arsenals.WebApi/bin/Debug/net8.0",
             "stopAtEntry": false,
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
