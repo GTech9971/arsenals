@@ -53,7 +53,7 @@ public class GunCategoryController : ControllerBase
         }
         catch (DuplicateGunCategoryNameException ex)
         {
-            return BadRequest(new RegistryGunCategoryResponseModel() { Error = new BaseResponseErrorModel() { Message = ex.Message } });
+            return BadRequest(new RegistryGunCategoryResponseModel() { Error = new ErrorModel() { Message = ex.Message } });
         }
     }
 

@@ -34,11 +34,11 @@ public class BulletController : ControllerBase
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(new RegistryBulletResponseModel() { Error = new BaseResponseErrorModel() { Message = ex.Message } });
+            return BadRequest(new RegistryBulletResponseModel() { Error = new ErrorModel() { Message = ex.Message } });
         }
         catch (DuplicateBulletNameException ex)
         {
-            return BadRequest(new RegistryBulletResponseModel() { Error = new BaseResponseErrorModel() { Message = ex.Message } });
+            return BadRequest(new RegistryBulletResponseModel() { Error = new ErrorModel() { Message = ex.Message } });
         }
     }
 }

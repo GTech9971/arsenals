@@ -18,8 +18,6 @@ public class GunController : ControllerBase
     private readonly UpdateGunApplicationService _updateGunApplicationService;
     private readonly GunImageUploadApplicationService _gunImageUploadApplicationService;
 
-    private readonly ILogger<GunController> _logger;
-
     public GunController(FetchAllGunApplicationService fetchAllGunApplicationService,
                             RegistryGunApplicationService registryGunApplicationService,
                             FetchGunApplicationService fetchGunApplicationService,
@@ -42,7 +40,6 @@ public class GunController : ControllerBase
         _deleteGunApplicationService = deleteGunApplicationService;
         _updateGunApplicationService = updateGunApplicationService;
         _gunImageUploadApplicationService = gunImageUploadApplicationService;
-        _logger = logger;
     }
 
     /// <summary>
@@ -51,16 +48,11 @@ public class GunController : ControllerBase
     /// <param name="category"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<GunDto>>>> FetchAllAsync([FromQuery] string? category)
+    public async Task<ActionResult<FetchGunsResponseModel>> FetchAllAsync([FromQuery] string? category)
     {
-        IAsyncEnumerable<GunDto> results = _fetchAllGunApplicationService.Execute(category);
-
-        if (await results.AnyAsync() == false)
-        {
-            return NoContent();
-        }
-
-        return Ok(BaseResponse<IEnumerable<GunDto>>.CreateSuccess(await results.ToListAsync()));
+        FetchGunsResponseModel response = await _fetchAllGunApplicationService.ExecuteAsync(category);
+        if (response.Data.Any() == false) { return NoContent(); }
+        return Ok(response);
     }
 
     /// <summary>
@@ -79,11 +71,11 @@ public class GunController : ControllerBase
         }
         catch (DuplicateGunNameException ex)
         {
-            return BadRequest(new RegistryGunResponseModel() { Error = new BaseResponseErrorModel() { Message = ex.Message } });
+            return BadRequest(new RegistryGunResponseModel() { Error = new ErrorModel() { Message = ex.Message } });
         }
         catch (NotFoundException ex)
         {
-            return NotFound(new RegistryGunResponseModel() { Error = new BaseResponseErrorModel() { Message = ex.Message } });
+            return NotFound(new RegistryGunResponseModel() { Error = new ErrorModel() { Message = ex.Message } });
         }
     }
 

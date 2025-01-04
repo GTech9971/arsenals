@@ -57,9 +57,9 @@ public class BaseControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
     /// カテゴリー登録
     /// </summary>
     /// <returns></returns>
-    protected async Task<string> RegistryCategoryAsync()
+    protected async Task<string> RegistryCategoryAsync(string name = "ライフル")
     {
-        RegistryGunCategoryRequestModel request = new RegistryGunCategoryRequestModel() { Name = "ライフル" };
+        RegistryGunCategoryRequestModel request = new RegistryGunCategoryRequestModel() { Name = name };
 
         using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/v1/arsenals/categories", request);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
