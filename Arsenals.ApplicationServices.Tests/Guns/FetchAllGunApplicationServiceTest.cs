@@ -22,7 +22,20 @@ public class FetchAllGunApplicationServiceTest
         _dummyGunCategoryBuilder = new DummyGunCategoryBuilder();
         _dummyGunBuilder = new DummyGunBuilder(_dummyGunCategoryBuilder);
 
-        var config = new MapperConfiguration(c => c.AddProfile<DtoMappingProfile>());
+        Mock<IConfiguration> configurationMock = new Mock<IConfiguration>();
+        configurationMock
+            .Setup(x => x[GunImage.DOWNLOAD_KEY])
+            .Returns("https://arsenals/assets");
+
+        configurationMock
+            .Setup(x => x[GunImage.ROOT_KEY])
+            .Returns("/usr/var/arsenals/assets");
+
+        var config = new MapperConfiguration(c =>
+        {
+            c.AddProfile(new DtoMappingProfile(configurationMock.Object));
+        });
+
         _mapper = config.CreateMapper();
     }
 
@@ -34,13 +47,7 @@ public class FetchAllGunApplicationServiceTest
             .Setup(x => x.FetchAllAsync())
             .Returns(AsyncEnumerable.Empty<Gun>());
 
-        Mock<IConfiguration> configurationMock = new Mock<IConfiguration>();
-        configurationMock
-            .Setup(x => x["images:root"])
-            .Returns("dummy");
-
         FetchAllGunApplicationService sut = new FetchAllGunApplicationService(gunRepositoryMock.Object,
-                                                                                configurationMock.Object,
                                                                                 _mapper);
 
         FetchGunsResponseModel response = await sut.ExecuteAsync(null);
@@ -57,13 +64,7 @@ public class FetchAllGunApplicationServiceTest
             .Returns(new List<Gun>() { _dummyGunBuilder.Build(), _dummyGunBuilder.Build() }
             .ToAsyncEnumerable());
 
-        Mock<IConfiguration> configurationMock = new Mock<IConfiguration>();
-        configurationMock
-            .Setup(x => x["images:root"])
-            .Returns("dummy");
-
         FetchAllGunApplicationService sut = new FetchAllGunApplicationService(gunRepositoryMock.Object,
-                                                                                configurationMock.Object,
                                                                                 _mapper);
 
         FetchGunsResponseModel actual = await sut.ExecuteAsync(null);
@@ -83,13 +84,7 @@ public class FetchAllGunApplicationServiceTest
             .Returns(new List<Gun>() { _dummyGunBuilder.Build(), _dummyGunBuilder.Build() }
             .ToAsyncEnumerable());
 
-        Mock<IConfiguration> configurationMock = new Mock<IConfiguration>();
-        configurationMock
-            .Setup(x => x["images:root"])
-            .Returns("dummy");
-
         FetchAllGunApplicationService sut = new FetchAllGunApplicationService(gunRepositoryMock.Object,
-                                                                                configurationMock.Object,
                                                                                 _mapper);
 
         FetchGunsResponseModel actual = await sut.ExecuteAsync(gunCategoryIdVal);

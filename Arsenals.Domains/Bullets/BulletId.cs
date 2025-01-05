@@ -8,7 +8,7 @@ namespace Arsenals.Domains.Bullets;
 public record BulletId
 {
     private const string PATTERN = @"^B-\d{4}$";
-    private static readonly int MIN = 100;
+    // private static readonly int MIN = 100;
 
     public string Value { get; init; }
 

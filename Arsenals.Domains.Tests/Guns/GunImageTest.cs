@@ -32,9 +32,9 @@ public class GunImageTest
     {
         GunId gunId = new GunId(gunIdVal);
 
-        GunImage sut = new GunImage(id, extension, _configuration);
+        GunImage sut = new GunImage(id, extension);
 
-        string actual = sut.DownloadUrl(gunId).ToString();
+        string actual = sut.DownloadUrl(gunId, _configuration[GunImage.DOWNLOAD_KEY]!).ToString();
 
         Assert.Equal(expected, actual);
     }
@@ -46,9 +46,9 @@ public class GunImageTest
     {
         GunId gunId = new GunId(gunIdVal);
 
-        GunImage sut = new GunImage(id, extension, _configuration);
+        GunImage sut = new GunImage(id, extension);
 
-        string actual = sut.Path(gunId);
+        string actual = sut.Path(gunId, _configuration[GunImage.ROOT_KEY]!);
 
         Assert.Equal(expected, actual);
     }

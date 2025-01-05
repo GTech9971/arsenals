@@ -44,6 +44,16 @@ public class Gun : IEquatable<Gun>
         _useableBullets = useableBullets.Distinct();
     }
 
+    public Gun(GunId id,
+        GunName name,
+        GunCategory category,
+        Capacity capacity,
+        IEnumerable<Bullet> useableBullets,
+        GunImage? gunImage) : this(id, name, category, capacity, useableBullets)
+    {
+        _image = gunImage;
+    }
+
     public GunId Id => _id;
     public GunName Name => _name;
     public GunCategory Category => _category;
@@ -92,6 +102,15 @@ public class Gun : IEquatable<Gun>
         _useableBullets = bullets
                             .Distinct()
                             .ToList();
+    }
+
+    /// <summary>
+    /// 銃の画像を変更する
+    /// </summary>
+    /// <param name="gunImage"></param>
+    public void ChangeGunImage(GunImage gunImage)
+    {
+        _image = gunImage;
     }
 
     public bool Equals(Gun? other)

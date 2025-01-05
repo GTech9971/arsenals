@@ -1,7 +1,6 @@
 using Arsenals.Domains.Guns;
 using Arsenals.Models;
 using AutoMapper;
-using Microsoft.Extensions.Configuration;
 
 namespace Arsenals.ApplicationServices.Guns;
 
@@ -10,28 +9,17 @@ namespace Arsenals.ApplicationServices.Guns;
 /// </summary>
 public class FetchAllGunApplicationService
 {
-
-    private static readonly string KEY = "images:root";
-    private readonly string _root;
-
     private readonly IGunRepository _repository;
-    private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
 
     public FetchAllGunApplicationService(IGunRepository repository,
-                                            IConfiguration configuration,
                                             IMapper mapper)
     {
         ArgumentNullException.ThrowIfNull(repository, nameof(repository));
-        ArgumentNullException.ThrowIfNull(configuration, nameof(configuration));
         ArgumentNullException.ThrowIfNull(mapper, nameof(mapper));
 
         _repository = repository;
-        _configuration = configuration;
         _mapper = mapper;
-
-        _root = _configuration[KEY]!;
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(_root, nameof(_root));
     }
 
     /// <summary>

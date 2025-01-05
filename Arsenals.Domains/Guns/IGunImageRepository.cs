@@ -5,9 +5,16 @@ namespace Arsenals.Domains.Guns;
 /// </summary>
 public interface IGunImageRepository
 {
-    Task<GunImage?> FetchAsync(GunId id);
+    Task<GunImage?> FetchAsync(GunImage gunImage);
 
-    Task DeleteAsync(GunId id);
+    Task DeleteAsync(GunImage gunImage);
 
-    Task SaveAsync(GunId id, MemoryStream data);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="gunId"></param>
+    /// <param name="extension"></param>
+    /// <param name="data"></param>
+    /// <returns>銃画像ID</returns>
+    Task<GunImage> SaveAsync(GunId gunId, string extension, MemoryStream data);
 }
