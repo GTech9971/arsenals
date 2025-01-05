@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Arsenals.Domains.Guns;
 using Arsenals.Infrastructure.Ef.Bullets;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,8 +38,14 @@ public class GunData
     [DisplayName("銃のカテゴリー外部キー")]
     [Comment("銃のカテゴリー外部キー")]
     public string GunCategoryDataId { get; set; } = null!;
-
     public GunCategoryData GunCategoryData { get; set; } = null!;
+
+
+    [ForeignKey(nameof(GunImageData))]
+    [Column("gun_image_id")]
+    [Comment("銃画像外部キー")]
+    public int? GunImageDataId { get; set; }
+    public GunImageData? GunImageData { get; set; }
 
 
     public ICollection<BulletData> BulletDataList { get; set; } = [];

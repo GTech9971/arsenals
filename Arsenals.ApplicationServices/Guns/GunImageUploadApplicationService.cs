@@ -2,6 +2,7 @@ using System.Transactions;
 using Arsenals.Domains;
 using Arsenals.Domains.Guns;
 using Arsenals.Domains.Guns.Exceptions;
+using Arsenals.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace Arsenals.ApplicationServices.Guns;
@@ -15,6 +16,8 @@ public class GunImageUploadApplicationService
     private readonly IGunRepository _gunRepository;
     private readonly IFileManager _fileManager;
     private readonly IConfiguration _configuration;
+
+    private readonly string _root;
 
     public GunImageUploadApplicationService(IGunImageRepository repository,
                                             IGunRepository gunRepository,
@@ -31,8 +34,11 @@ public class GunImageUploadApplicationService
         _fileManager = fileManager;
         _configuration = configuration;
 
+        string? rootVal = _configuration.GetGunImageRoot();
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(rootVal, nameof(rootVal));
+        _root = rootVal;
+
         ArgumentNullException.ThrowIfNullOrWhiteSpace(_configuration.GetGunImageDownloadUrl(), nameof(_configuration));
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(_configuration.GetGunImageRoot(), nameof(_configuration));
     }
 
     /// <summary>
@@ -42,18 +48,21 @@ public class GunImageUploadApplicationService
     /// <param name="data"></param>
     /// <returns></returns>
     /// <exception cref="GunNotFoundException"></exception>
-    public async Task<string> ExecuteAsync(string gunIdVal, string extension, MemoryStream data)
+    public async Task<UploadGunImageResponseModel> ExecuteAsync(string gunIdVal, string extension, MemoryStream data)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(gunIdVal, nameof(gunIdVal));
         ArgumentNullException.ThrowIfNullOrWhiteSpace(extension, nameof(extension));
         ArgumentNullException.ThrowIfNull(data, nameof(data));
 
-        if (_fileManager.ExistsDirectory(_configuration.GetGunImageRoot()!))
+        GunId gunId = new GunId(gunIdVal);
+        string path = Path.Combine(_root, gunId.Value);
+
+        if (_fileManager.ExistsDirectory(path) == false)
         {
-            _fileManager.CreateDirectory(_configuration.GetGunImageRoot()!);
+            _fileManager.CreateDirectory(path);
         }
 
-        GunId gunId = new GunId(gunIdVal);
+
         Gun? found = await _gunRepository.FetchAsync(gunId);
         if (found == null) { throw new GunNotFoundException(gunId); }
 
@@ -69,7 +78,14 @@ public class GunImageUploadApplicationService
 
             transaction.Complete();
 
-            return gunImage.DownloadUrl(gunId, _configuration.GetGunImageDownloadUrl()!).ToString();
+            return new UploadGunImageResponseModel()
+            {
+                Error = null,
+                Data = new UploadGunImageResponseAllOfDataModel()
+                {
+                    Url = gunImage.DownloadUrl(gunId, _configuration.GetGunImageDownloadUrl()!).ToString()
+                }
+            };
         }
     }
 }

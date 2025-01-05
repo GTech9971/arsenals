@@ -32,6 +32,7 @@ public class EfGunRepository : IGunRepository
         return _context.Guns
                         .AsNoTracking()
                         .Include(x => x.GunCategoryData)
+                        .Include(x => x.GunImageData)
                         .Include(x => x.BulletDataList)
                         .AsSplitQuery()
                         .Select(x => _mapper.Map<Gun>(x))
@@ -44,6 +45,7 @@ public class EfGunRepository : IGunRepository
                                 .AsNoTracking()
                                 .Where(x => x.Id == gunId.Value)
                                 .Include(x => x.GunCategoryData)
+                                .Include(x => x.GunImageData)
                                 .Include(x => x.BulletDataList)
                                 .AsSplitQuery()
                                 .Select(x => _mapper.Map<Gun>(x))
@@ -55,6 +57,7 @@ public class EfGunRepository : IGunRepository
         GunData? found = await _context.Guns
                                     .Where(x => x.Id == gun.Id.Value)
                                     .Include(x => x.GunCategoryData)
+                                    .Include(x => x.GunImageData)
                                     .Include(x => x.BulletDataList)
                                     .AsSplitQuery()
                                     .SingleOrDefaultAsync();

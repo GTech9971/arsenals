@@ -3,6 +3,7 @@ using System;
 using Arsenals.Infrastructure.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Arsenals.Infrastructure.Ef.Migrations
 {
     [DbContext(typeof(ArsenalDbContext))]
-    partial class ArsenalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250104235246_FixAddGunImageTableIII")]
+    partial class FixAddGunImageTableIII
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,12 +124,6 @@ namespace Arsenals.Infrastructure.Ef.Migrations
                         .HasComment("主キー");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Extension")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("extension")
-                        .HasComment("拡張子");
 
                     b.HasKey("Id");
 

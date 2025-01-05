@@ -2,9 +2,12 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Arsenals.ApplicationServices.Users;
+using Arsenals.Domains.Guns;
 using Arsenals.Infrastructure.Ef;
 using Arsenals.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Arsenals.WebApi.Tests;
 
@@ -24,6 +27,10 @@ public class BaseControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
         _factory = new CustomWebApplicationFactory(fixture);
         _client = _factory.CreateClient(options);
         _context = fixture.ArsenalDbContext;
+
+        using var scope = _factory.Services.CreateScope();
+        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        Directory.Delete(configuration[GunImage.ROOT_KEY]!, recursive: true);
     }
 
     public void Dispose()

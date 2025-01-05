@@ -75,7 +75,14 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 });
 
 //AutoMapper
-builder.Services.AddAutoMapper(typeof(DtoMappingProfile).Assembly);
+// *コンストラクタ引数つきProfileを必要とする場合の設定
+// https://christosmonogios.com/2023/01/21/How-To-Pass-Parameters-To-An-AutoMapper-Profile-Constructor-aka-Dependency-Injection-For-AutoMapper/
+builder.Services.AddAutoMapper(
+    (serviceProvider, mapperConfiguration) =>
+        mapperConfiguration.AddProfile(new DtoMappingProfile(serviceProvider.GetRequiredService<IConfiguration>())),
+        typeof(DtoMappingProfile).Assembly
+);
+//コンストラクタ引数が入らない場合は以下で良い
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 
 //DI

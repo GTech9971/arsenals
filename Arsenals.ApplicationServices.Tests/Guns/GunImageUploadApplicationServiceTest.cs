@@ -1,6 +1,7 @@
 using Arsenals.ApplicationServices.Guns;
 using Arsenals.Domains;
 using Arsenals.Domains.Guns;
+using Arsenals.Models;
 using Microsoft.Extensions.Configuration;
 using Moq;
 
@@ -44,6 +45,9 @@ public class GunImageUploadApplicationServiceTest
             .Returns("/usr/var/arsenals/assets/guns/images");
 
         Mock<IFileManager> fileManagerMock = new Mock<IFileManager>();
+        fileManagerMock
+            .Setup(x => x.ExistsDirectory(It.IsAny<string>()))
+            .Returns(false);
 
         Mock<IGunImageRepository> gunImageRepositoryMock = new Mock<IGunImageRepository>();
         gunImageRepositoryMock
@@ -55,13 +59,19 @@ public class GunImageUploadApplicationServiceTest
                                                                                     configurationMock.Object,
                                                                                     fileManagerMock.Object);
 
-        using (MemoryStream stream = new MemoryStream())
-        {
-            byte data = 0x41;
-            stream.WriteByte(data);
+        using MemoryStream stream = new MemoryStream();
 
-            string imageDownloadUrl = await sut.ExecuteAsync(gunId.Value, ".jpg", stream);
-            Assert.Equal("https://arsenals/assets/guns/images/G-1000/1.jpg", imageDownloadUrl);
-        }
+        byte data = 0x41;
+        stream.WriteByte(data);
+
+        UploadGunImageResponseModel responseModel = await sut.ExecuteAsync(gunId.Value, ".jpg", stream);
+        Assert.NotNull(responseModel.Data);
+        Assert.Equal("https://arsenals/assets/guns/images/G-1000/1.jpg", responseModel.Data.Url);
+
+        fileManagerMock
+            .Verify(x => x.ExistsDirectory("/usr/var/arsenals/assets/guns/images/G-1000"), Times.Once());
+
+        fileManagerMock
+            .Verify(x => x.CreateDirectory("/usr/var/arsenals/assets/guns/images/G-1000"), Times.Once());
     }
 }

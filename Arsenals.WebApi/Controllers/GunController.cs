@@ -161,29 +161,30 @@ public class GunController : ControllerBase
     /// <param name="file"></param>
     /// <returns></returns>
     [HttpPost("{gunId}/images")]
-    public async Task<ActionResult<BaseResponse<string>>> UploadGunImageAsync([FromRoute] string gunId, [FromForm] IFormFile data)
+    public async Task<ActionResult<UploadGunImageResponseModel>> UploadGunImageAsync([FromRoute] string gunId, [FromForm] IFormFile data)
     {
         if (data == null || data.Length == 0)
         {
-            return BadRequest(BaseResponse<object?>.CreateError("画像ファイルは必須です"));
+            return BadRequest(new UploadGunImageResponseModel() { Error = new ErrorModel() { Message = "画像データは必須です。" } });
         }
 
         try
         {
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                await data.CopyToAsync(memoryStream);
-                Uri uri = await _gunImageUploadApplicationService.ExecuteAsync(gunId, memoryStream);
-                return this.Created(BaseResponse<string>.CreateSuccess(uri.ToString()));
-            }
+            FileInfo fileInfo = new FileInfo(data.FileName);
+            using MemoryStream memoryStream = new MemoryStream();
+            await data.CopyToAsync(memoryStream);
+
+            UploadGunImageResponseModel responseModel = await _gunImageUploadApplicationService.ExecuteAsync(gunId, fileInfo.Extension, memoryStream);
+            Response.Headers.Location = responseModel.Data!.Url;
+            return this.Created(responseModel);
         }
-        catch (ArgumentException ex) when (ex is ArgumentNullException || ex is ArgumentOutOfRangeException)
+        catch (ArgumentException ex)
         {
-            return BadRequest(BaseResponse<object?>.CreateError(ex));
+            return BadRequest(new UploadGunImageResponseModel() { Error = new ErrorModel() { Message = ex.Message } });
         }
         catch (NotFoundException ex)
         {
-            return NotFound(BaseResponse<object?>.CreateError(ex));
+            return NotFound(new UploadGunImageResponseModel() { Error = new ErrorModel() { Message = ex.Message } });
         }
     }
 }

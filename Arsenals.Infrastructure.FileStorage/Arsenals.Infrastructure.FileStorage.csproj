@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="../Arsenals.Infrastructure.Ef/Arsenals.Infrastructure.Ef.csproj" />
     <ProjectReference Include="..\Arsenals.Domains\Arsenals.Domains.csproj" />
   </ItemGroup>
 

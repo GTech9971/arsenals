@@ -13,4 +13,5 @@ public class ArsenalDbContext : DbContext
     public DbSet<GunData> Guns => Set<GunData>();
     public DbSet<GunCategoryData> GunCategories => Set<GunCategoryData>();
     public DbSet<BulletData> Bullets => Set<BulletData>();
+    public DbSet<GunImageData> GunImages => Set<GunImageData>();
 }
