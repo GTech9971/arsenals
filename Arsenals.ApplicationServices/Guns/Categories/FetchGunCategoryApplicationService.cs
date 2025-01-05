@@ -1,5 +1,5 @@
-using Arsenals.ApplicationServices.Guns.Dto;
 using Arsenals.Domains.Guns;
+using Arsenals.Models;
 using AutoMapper;
 
 namespace Arsenals.ApplicationServices.Guns;
@@ -21,10 +21,21 @@ public class FetchGunCategoryApplicationService
         _mapper = mapper;
     }
 
-    public IAsyncEnumerable<GunCategoryDto> ExecuteAsync()
+    /// <summary>
+    /// 全銃カテゴリー取得
+    /// </summary>
+    /// <returns></returns>
+    public async Task<FetchGunCategoryResponseModel> ExecuteAsync()
     {
-        IAsyncEnumerable<GunCategory> categories = _repository.FetchAllAsync();
-        return categories
-                .Select(x => _mapper.Map<GunCategoryDto>(x));
+        List<GunCategoryModel> categories = await _repository
+                                                    .FetchAllAsync()
+                                                    .Select(_mapper.Map<GunCategoryModel>)
+                                                    .ToListAsync();
+
+        return new FetchGunCategoryResponseModel()
+        {
+            Error = null,
+            Data = categories
+        };
     }
 }

@@ -1,5 +1,4 @@
 using Arsenals.ApplicationServices.Guns;
-using Arsenals.ApplicationServices.Guns.Dto;
 using Arsenals.Domains.Guns.Exceptions;
 using Arsenals.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -27,14 +26,24 @@ public class GunCategoryController : ControllerBase
         _deleteGunCategoryApplicationService = deleteGunCategoryApplicationService;
     }
 
+    /// <summary>
+    /// 銃カテゴリー取得
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult<BaseResponse<IEnumerable<GunCategoryDto>>>> FetchAllAsync()
+    public async Task<ActionResult<FetchGunCategoryResponseModel>> FetchAllAsync()
     {
-        IAsyncEnumerable<GunCategoryDto> data = _fetchGunCategoryApplicationService.ExecuteAsync();
+        try
+        {
+            FetchGunCategoryResponseModel responseModel = await _fetchGunCategoryApplicationService.ExecuteAsync();
+            if (responseModel.Data.Any() == false) { return NoContent(); }
 
-        if (await data.AnyAsync() == false) { return NoContent(); }
-
-        return Ok(BaseResponse<IEnumerable<GunCategoryDto>>.CreateSuccess(await data.ToListAsync()));
+            return Ok(responseModel);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new FetchGunCategoryResponseModel() { Error = new ErrorModel() { Message = ex.Message } });
+        }
     }
 
     /// <summary>

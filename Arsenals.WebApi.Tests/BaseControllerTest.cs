@@ -30,7 +30,12 @@ public class BaseControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
 
         using var scope = _factory.Services.CreateScope();
         var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-        Directory.Delete(configuration[GunImage.ROOT_KEY]!, recursive: true);
+
+        string? root = configuration[GunImage.ROOT_KEY]!;
+        if (Directory.Exists(root))
+        {
+            Directory.Delete(root, recursive: true);
+        }
     }
 
     public void Dispose()
