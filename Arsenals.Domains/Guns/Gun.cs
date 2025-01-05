@@ -14,7 +14,7 @@ public class Gun : IEquatable<Gun>
     private GunCategory _category;
 
     //以下任意項目
-    private Uri? _imageUri;
+    private GunImage? _image;
     private IEnumerable<Bullet> _useableBullets;
 
     public Gun(GunId id,
@@ -48,7 +48,7 @@ public class Gun : IEquatable<Gun>
     public GunName Name => _name;
     public GunCategory Category => _category;
     public Capacity Capacity => _capacity;
-    public Uri? ImageUrl => _imageUri;
+    public GunImage? Image => _image;
     public ImmutableList<Bullet> UseableBullets => _useableBullets.ToImmutableList();
 
 
@@ -119,10 +119,10 @@ public class Gun : IEquatable<Gun>
             _target = new Gun(id, name, category, capacity);
         }
 
-        public Builder WithImageUrl(Uri? imageUrl)
+        public Builder WithImageUrl(GunImage? image)
         {
             ArgumentNullException.ThrowIfNull(_target, nameof(_target));
-            _target._imageUri = imageUrl;
+            _target._image = image;
             return this;
         }
 

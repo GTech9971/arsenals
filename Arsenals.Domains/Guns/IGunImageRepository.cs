@@ -5,7 +5,7 @@ namespace Arsenals.Domains.Guns;
 /// </summary>
 public interface IGunImageRepository
 {
-    Task<Uri?> FetchAsync(GunId id);
+    Task<GunImage?> FetchAsync(GunId id);
 
     Task DeleteAsync(GunId id);
 
