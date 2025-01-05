@@ -20,7 +20,7 @@ public class RegistryBulletControllerTest : BaseControllerTest
             Damage = 3
         };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/bullets", request);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/v1/bullets", request);
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
         RegistryBulletResponseModel? responseModel = await response.Content.ReadFromJsonAsync<RegistryBulletResponseModel>();
@@ -36,7 +36,7 @@ public class RegistryBulletControllerTest : BaseControllerTest
             Damage = 3
         };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/bullets", request);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/v1/bullets", request);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
         RegistryBulletResponseModel? responseModel = await response.Content.ReadFromJsonAsync<RegistryBulletResponseModel>();

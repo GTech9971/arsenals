@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Arsenals.WebApi.Controllers;
 
-[Route("api/v1/arsenals/guns")]
+[Route("v1/guns")]
 [ApiController]
 public class GunController : ControllerBase
 {

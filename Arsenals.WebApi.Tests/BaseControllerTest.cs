@@ -73,7 +73,7 @@ public class BaseControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
     {
         RegistryGunCategoryRequestModel request = new RegistryGunCategoryRequestModel() { Name = name };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/v1/arsenals/categories", request);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("v1/categories", request);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
         RegistryGunCategoryResponseModel? baseResponse = await response.Content.ReadFromJsonAsync<RegistryGunCategoryResponseModel>();
@@ -99,7 +99,7 @@ public class BaseControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
             Damage = 3
         };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/v1/arsenals/bullets", request);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/v1/bullets", request);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
         RegistryBulletResponseModel? responseModel = await response.Content.ReadFromJsonAsync<RegistryBulletResponseModel>();
@@ -130,7 +130,7 @@ public class BaseControllerTest : IClassFixture<PostgreSqlTest>, IDisposable
             UseBullets = []
         };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/v1/arsenals/guns", request);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/v1/guns", request);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
         RegistryGunResponseModel? responseModel = await response.Content.ReadFromJsonAsync<RegistryGunResponseModel>();

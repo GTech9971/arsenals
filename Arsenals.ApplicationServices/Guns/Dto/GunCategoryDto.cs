@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Arsenals.ApplicationServices.Guns.Dto;
 
+[Obsolete("Arsenals.Modelsを使用してください")]
 public class GunCategoryDto
 {
     [JsonPropertyName("id")]

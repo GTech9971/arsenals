@@ -17,7 +17,7 @@ public class DeleteGunCategoryControllerTest : BaseControllerTest
     [Fact(DisplayName = "存在しない")]
     public async void not_found()
     {
-        using HttpResponseMessage response = await _client.DeleteAsync("/api/v1/arsenals/categories/C-9999");
+        using HttpResponseMessage response = await _client.DeleteAsync("/v1/categories/C-9999");
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
@@ -25,7 +25,7 @@ public class DeleteGunCategoryControllerTest : BaseControllerTest
     public async void delete()
     {
         string categoryId = await RegistryCategoryAsync();
-        using HttpResponseMessage response = await _client.DeleteAsync($"/api/v1/arsenals/categories/{categoryId}");
+        using HttpResponseMessage response = await _client.DeleteAsync($"v1/categories/{categoryId}");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
         Assert.Empty(_fixture.ArsenalDbContext.GunCategories);

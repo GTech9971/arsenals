@@ -9,12 +9,6 @@ public class RegistryGunCategoryControllerTest : BaseControllerTest
 {
     public RegistryGunCategoryControllerTest(PostgreSqlTest fixture) : base(fixture) { }
 
-    [Fact(DisplayName = "データなし")]
-    public async void empty()
-    {
-        using HttpResponseMessage response = await _client.GetAsync("/api/v1/arsenals/categories");
-        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
-    }
 
     [Fact(DisplayName = "銃カテゴリー登録")]
     public async void registry_gun_category()
@@ -24,7 +18,7 @@ public class RegistryGunCategoryControllerTest : BaseControllerTest
             Name = "ライフル"
         };
 
-        using HttpResponseMessage response = await _client.PostAsJsonAsync("/api/v1/arsenals/categories", request);
+        using HttpResponseMessage response = await _client.PostAsJsonAsync("/v1/categories", request);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
         RegistryGunCategoryResponseModel? baseResponse = await response.Content.ReadFromJsonAsync<RegistryGunCategoryResponseModel>();

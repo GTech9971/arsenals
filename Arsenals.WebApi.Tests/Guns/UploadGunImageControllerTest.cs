@@ -45,7 +45,7 @@ public class UploadGunImageControllerTest : BaseControllerTest
         string categoryId = await RegistryCategoryAsync();
         string gunId = await RegistryGunAsync(gunName: "M911A1", categoryId);
 
-        HttpResponseMessage response = await _client.PostAsync($"/api/v1/arsenals/guns/{gunId}/images", formData);
+        HttpResponseMessage response = await _client.PostAsync($"/v1/guns/{gunId}/images", formData);
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         Assert.NotNull(response.Headers.Location);
 
@@ -66,7 +66,7 @@ public class UploadGunImageControllerTest : BaseControllerTest
         Assert.True(File.Exists(path));
 
         // データ取得
-        using var fetchAllResponse = await _client.GetAsync($"/api/v1/arsenals/guns");
+        using var fetchAllResponse = await _client.GetAsync($"/v1/guns");
         Assert.Equal(HttpStatusCode.OK, fetchAllResponse.StatusCode);
 
         FetchGunsResponseModel? fetchGunsResponseModel = await fetchAllResponse.Content.ReadFromJsonAsync<FetchGunsResponseModel>();

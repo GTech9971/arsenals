@@ -11,7 +11,7 @@ public class FetchGunsControllerTest : BaseControllerTest
     [Fact(DisplayName = "0件")]
     public async Task no_content()
     {
-        using HttpResponseMessage response = await _client.GetAsync("/api/v1/arsenals/guns");
+        using HttpResponseMessage response = await _client.GetAsync("/v1/guns");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
@@ -22,7 +22,7 @@ public class FetchGunsControllerTest : BaseControllerTest
         await RegistryGunAsync(gunName: "M1911A1", categoryId);
         await RegistryGunAsync(gunName: "G3A1", categoryId);
 
-        using HttpResponseMessage response = await _client.GetAsync("/api/v1/arsenals/guns");
+        using HttpResponseMessage response = await _client.GetAsync("/v1/guns");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         FetchGunsResponseModel? responseModel = await response.Content.ReadFromJsonAsync<FetchGunsResponseModel>();
@@ -43,7 +43,7 @@ public class FetchGunsControllerTest : BaseControllerTest
         await RegistryGunAsync(gunName: "B", secondCategoryId);
         await RegistryGunAsync(gunName: "C", secondCategoryId);
 
-        using HttpResponseMessage response = await _client.GetAsync($"/api/v1/arsenals/guns?category={categoryIdVal}");
+        using HttpResponseMessage response = await _client.GetAsync($"/v1/guns?category={categoryIdVal}");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         FetchGunsResponseModel? responseModel = await response.Content.ReadFromJsonAsync<FetchGunsResponseModel>();

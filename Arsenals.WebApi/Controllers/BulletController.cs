@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Arsenals.WebApi.Controllers;
 
-[Route("api/v1/arsenals/bullets")]
+[Route("v1/bullets")]
 [ApiController]
 public class BulletController : ControllerBase
 {

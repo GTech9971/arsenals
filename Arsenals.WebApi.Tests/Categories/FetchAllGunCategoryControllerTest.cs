@@ -15,7 +15,7 @@ public class FetchAllGunCategoryControllerTest : BaseControllerTest
     [Fact(DisplayName = "取得結果なし")]
     public async Task empty()
     {
-        using var response = await _client.GetAsync("/api/v1/arsenals/categories");
+        using var response = await _client.GetAsync("/v1/categories");
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
@@ -24,7 +24,7 @@ public class FetchAllGunCategoryControllerTest : BaseControllerTest
     {
         await RegistryCategoryAsync();
 
-        using var response = await _client.GetAsync("/api/v1/arsenals/categories");
+        using var response = await _client.GetAsync("v1/categories");
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         FetchGunCategoryResponseModel? responseModel = await response.Content.ReadFromJsonAsync<FetchGunCategoryResponseModel>();
