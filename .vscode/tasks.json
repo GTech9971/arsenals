@@ -16,6 +16,22 @@
             }
         },
         {
+            "label": "Test - Domains",
+            "detail": "ドメインのテスト",
+            "command": "dotnet",
+            "type": "process",
+            "group": "test",
+            "args": [
+                "test",
+                "${workspaceFolder}/Arsenals.Domains.Tests/Arsenals.Domains.Tests.csproj",
+                "--collect:",
+                "XPlat Code Coverage",
+                "--logger",
+                "trx;LogFileName=TestResult.trx"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "Test - ApplicationServices",
             "detail": "アプリケーションサービスのテスト",
             "command": "dotnet",
@@ -71,13 +87,30 @@
                 "${workspaceFolder}/Arsenals.WebApi/Arsenals.WebApi.csproj",
                 "--configuration",
                 "Release",
+                "-r",
+                "linux-x64",
                 "/p:EnvironmentName=${input:environment}"
             ],
             "problemMatcher": "$msCompile",
         },
         {
+            "label": "Publish Migration Batch",
+            "detail": "EFCoreマイグレーション実行用バッチをpublishする",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "publish",
+                "${workspaceFolder}/Arsenals.Infrastructure.Migration.Batch/Arsenals.Infrastructure.Migration.Batch.csproj",
+                "--configuration",
+                "Release",
+                "-r",
+                "linux-x64"
+            ],
+            "problemMatcher": "$msCompile",
+        },
+        {
             "label": "Migration",
-            "command": "$env:DOTNET_ENVIRONMENT='${input:environment}';dotnet",
+            "command": "dotnet",
             "type": "shell",
             "args": [
                 "ef",
@@ -87,11 +120,14 @@
                 "--project",
                 "${workspaceFolder}/Arsenals.Infrastructure.Ef/Arsenals.Infrastructure.Ef.csproj",
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "dependsOn": [
+                "Specify DOTNET_ENVIRONMENT"
+            ]
         },
         {
             "label": "Migration:Apply",
-            "command": "$env:DOTNET_ENVIRONMENT='${input:environment}';dotnet",
+            "command": "dotnet",
             "type": "shell",
             "args": [
                 "ef",
@@ -100,8 +136,20 @@
                 "--project",
                 "${workspaceFolder}/Arsenals.Infrastructure.Ef/Arsenals.Infrastructure.Ef.csproj",
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "dependsOn": [
+                "Specify DOTNET_ENVIRONMENT"
+            ]
         },
+        {
+            "label": "Specify DOTNET_ENVIRONMENT",
+            "detail": "DOTNET_ENVIRONMENT環境変数を設定する",
+            "command": "export",
+            "type": "shell",
+            "args": [
+                "DOTNET_ENVIRONMENT='${input:environment}'",
+            ]
+        }
     ],
     "inputs": [
         {

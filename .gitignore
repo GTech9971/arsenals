@@ -404,3 +404,4 @@ FodyWeavers.xsd
 TestResults
 TestReport
 *.Production.json
+.env
