@@ -19,10 +19,12 @@ using Arsenals.Infrastructure.FileStorage;
 using Arsenals.Infrastructure.FileStorage.Guns;
 using Arsenals.WebApi;
 using Arsenals.WebApi.Filters;
+using Arsenals.WebApi.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Okta.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -143,25 +145,16 @@ builder.Services.AddControllers(options =>
 });
 
 //Auth
+var logger = loggerFactory.CreateLogger<Program>();
 builder.Services.AddAuthentication(opt =>
 {
-    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+    opt.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
+    opt.DefaultChallengeScheme = OktaDefaults.ApiAuthenticationScheme;
+    opt.DefaultSignInScheme = OktaDefaults.ApiAuthenticationScheme;
+}).AddOktaWebApi(new OktaWebApiOptions()
 {
-    options.TokenValidationParameters = new TokenValidationParameters()
-    {
-        RequireExpirationTime = true,
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-        ValidAudience = builder.Configuration["JwtSettings:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            builder.Configuration["JwtSettings:SecurityKey"]!
-        ))
-    };
+    OktaDomain = builder.Configuration["Okta:OktaDomain"],
+    AuthorizationServerId = builder.Configuration["Okta:AuthorizationServerId"],
 });
 
 var app = builder.Build();
@@ -169,13 +162,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
 }
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
-
 
 
 public partial class Program { }

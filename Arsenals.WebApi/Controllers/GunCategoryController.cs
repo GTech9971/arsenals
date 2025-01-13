@@ -1,12 +1,14 @@
 using Arsenals.ApplicationServices.Guns;
 using Arsenals.Domains.Guns.Exceptions;
 using Arsenals.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Arsenals.WebApi.Controllers;
 
 [Route("v1/categories")]
 [ApiController]
+[Authorize]
 public class GunCategoryController : ControllerBase
 {
     private readonly FetchGunCategoryApplicationService _fetchGunCategoryApplicationService;
