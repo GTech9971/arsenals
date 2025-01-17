@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using Arsenals.ApplicationServices.Bullets;
@@ -19,11 +18,8 @@ using Arsenals.Infrastructure.FileStorage;
 using Arsenals.Infrastructure.FileStorage.Guns;
 using Arsenals.WebApi;
 using Arsenals.WebApi.Filters;
-using Arsenals.WebApi.Middlewares;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Okta.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -164,10 +160,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+else
+{
+    app.UseAuthentication();
+    app.UseAuthorization();
+}
 
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseHttpsRedirection();
+
 app.MapControllers();
 app.Run();
 
