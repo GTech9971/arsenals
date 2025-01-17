@@ -4,6 +4,7 @@
         "dbsettings",
         "Glock",
         "Mvvm",
+        "Newtonsoft",
         "Npgsql"
     ]
 }

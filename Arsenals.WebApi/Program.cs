@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
 using Arsenals.ApplicationServices.Bullets;
 using Arsenals.ApplicationServices.Guns;
 using Arsenals.ApplicationServices.Guns.Dto;
@@ -17,6 +15,7 @@ using Arsenals.Infrastructure.Ef.Guns;
 using Arsenals.Infrastructure.FileStorage;
 using Arsenals.Infrastructure.FileStorage.Guns;
 using Arsenals.WebApi;
+using Newtonsoft.Json;
 using Arsenals.WebApi.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -131,17 +130,14 @@ builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ExceptionFilter>();
     options.Filters.Add<LoggingFilter>();
-}).AddJsonOptions(options =>
+})
+.AddNewtonsoftJson(options =>
 {
-    if (builder.Environment.IsDevelopment())
-    {
-        options.JsonSerializerOptions.WriteIndented = true;
-    }
-    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
 });
 
 //Auth
-var logger = loggerFactory.CreateLogger<Program>();
 builder.Services.AddAuthentication(opt =>
 {
     opt.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
@@ -159,15 +155,15 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
+    app.MapControllers().AllowAnonymous();
 }
 else
 {
-    app.UseAuthentication();
-    app.UseAuthorization();
+    app.MapControllers();
 }
 
-
-app.MapControllers();
+app.UseAuthentication();
+app.UseAuthorization();
 app.Run();
 
 
